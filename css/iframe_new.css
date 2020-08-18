@@ -1,0 +1,214 @@
+html,
+body {
+  min-height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+}
+#BodyBg {
+  background: url("Images/desk.jpg?v=3") no-repeat;
+  background-size: cover;
+}
+#BodyBg > img {
+  display: none;
+}
+
+/* 防止span受body flex的影响 */
+body > span, body > span > span {
+  display: contents;
+}
+#Form1 > div {
+  position: unset !important;
+}
+
+#Form1 > label {
+  top: 120px !important;
+}
+/* 头部框样式 */
+.ui-widget-header {
+  color: #000000;
+  background: #f2f2f2;
+  border: none;
+  padding: 10px 9px;
+  margin-bottom: 10px;
+}
+/* 头部按钮 */
+.fg-buttonset {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+}
+/* 默认显示样式 */
+.ui-state-default {
+  border: none;
+  background: #282a37;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.ui-priority-primary .ui-icon {
+  background-image: none;
+  display: none;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+  border: 1px solid #000000;
+  background: rgba(24, 144, 255, 0.05);
+}
+/* 按钮内容 */
+.fg-toolbar .fg-button {
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+}
+/* ----表单样式---- */
+/* 头部 */
+.ui-widget-header button.ui-state-default,
+#Special {
+  border: none;
+  background: #409eff;
+  color: #ffffff;
+  font-size: 12px;
+  border-radius: 3px;
+  padding: 7px 17px;
+  font-weight: 500;
+  margin-right: 3px;
+}
+/* title */
+.ui-widget-header.ui-jqgrid-titlebar {
+  border-bottom: none;
+  background: #ffffff;
+  color: #333333;
+  padding-bottom: 12px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.ui-widget-content .ui-state-default {
+  border: 1px solid transparent;
+  background: #f2f2f2;
+  color: #333333;
+}
+.ui-widget-content {
+  /* border: none; */
+  background: #ffffff;
+  color: #333333;
+}
+
+/* table 内边距 */
+#GridView1 th,
+#GridView1 td {
+  padding: 4px 0;
+  border: 1px solid #f2f2f2;
+}
+.ui-jqgrid .ui-jqgrid-htable th {
+  padding: 4px 2px;
+}
+
+/* 给table一个最小高度 */
+.ui-jqgrid-view .ui-jqgrid-bdiv div table {
+  min-height: 1px;
+}
+
+.ui-jqgrid tr.ui-row-ltr td {
+  border-right: 1px solid #f2f2f2;
+}
+.ui-jqgrid tr.jqgrow td {
+  border: 1px solid #f2f2f2;
+  padding: 4px 0;
+}
+.ui-jqgrid td.jqgrid-rownum {
+  background: #fff;
+}
+
+/* table 下的子table */
+.ui-jqgrid .ui-subgrid tr.ui-subtblcell td {
+  padding: 4px 0;
+  border: 1px solid #f2f2f2;
+}
+
+/* 按钮弹出框 */
+.ui-widget-content .ui-closer {
+  background-color: #409eff;
+  border: 1px solid black;
+  color: #fff;
+  padding: 0;
+}
+
+/* 表单行被点击样式 */
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight {
+  border: 1px solid #000000;
+  background: #c9e6ff;
+}
+
+.ui-widget-header .ui-state-highlight {
+  border: 1px solid #409eff;
+  background: #409eff;
+  color: #ffffff;
+  padding: 6px 15px;
+}
+
+/* 树状图设置 */
+.simpleTree .root {
+  background: url("/images/root_new.png") 18px 1px no-repeat #fff;
+}
+
+.simpleTree .folder-close-last {
+  background: url("/images/folder-close_new.png") 1px -2px no-repeat #fff;
+}
+
+.simpleTree .folder-open-last {
+  background: url("/images/folder-open_new.png") 1px -2px no-repeat #fff;
+}
+
+.simpleTree .doc-last {
+  background: url("/images/leaf-last_new.png") -1px -2px no-repeat #fff;
+}
+
+span.text {
+  margin-left: 5px;
+}
+
+/* 订单表格的间距 */
+.style1 {
+  margin-top: 5px;
+}
+
+.ui-widget-header .btnsHidden {
+  display: none;
+}
+
+#showMore,
+#showLess {
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  font-size: 12px;
+  padding: 7px 15px;
+  color: #333;
+  line-height: 16px;
+}
+
+#showMore:hover,
+#showLess:hover {
+  background-color: #f2f2f2;
+}
+
+/* 遮罩颜色 */
+.ui-widget-overlay {
+  background: #000000;
+  opacity: 0.5;
+  filter: Alpha(Opacity=50);
+}
+
+.ui-jqgrid .ui-jqgrid-btable, .ui-jqgrid .ui-jqgrid-htable, table {
+  border-collapse: collapse;
+}

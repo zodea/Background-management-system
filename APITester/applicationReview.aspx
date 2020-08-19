@@ -176,12 +176,9 @@
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="/d/js/ele-common.js"></script>
   <script>
-    var requestCount = 0; // 请求计数
-    var loading = null; // 是否加载
     var api = "http://192.168.3.222:8024/sr/CustomerApplyProcess.ashx?Oper="; // 开发添加代理，发布需删除
     var NVMicroService = {
       GetApplyProcess: "GetApplyProcess", // 申请审核情况
-      GetApplyListByPC: "GetApplyListByPC", // 申请审核-XXX级别--待XX审核列表
     }; // 接口地址
     var vm = new Vue({
       el: "#app",
@@ -197,7 +194,7 @@
       },
       methods: {
         /* 公共部分 START */
-        getList() {
+        getList: function () {
           var that = this;
           this.MT.request({
             url: api + NVMicroService.GetApplyProcess,
@@ -208,7 +205,7 @@
               list.forEach(function (item) {
                 that.menuNav.push(item.BrandName);
                 that.brand_id.push(item.Brand_ID);
-              })
+              });
               // 根据点击的头部导航赋值
               that.brandLevels = that.setList(data.List, that.menuNav[that.activeIndex])[0].BrandLevels;
               var time = new Date();
@@ -223,18 +220,18 @@
             onfail: function (err) {
               console.error(err);
             }
-          })
+          });
         },
-        numToTen(val) {
+        numToTen: function (val) {
           return val < 10 ? "0" + val : val;
         },
         /**
          *  根据 点击的头部标签type 对展示的数据进行筛选
          */
-        setList(data, type) {
+        setList: function (data, type) {
           return data.filter(function (item) {
-            return item.BrandName === type
-          })
+            return item.BrandName === type;
+          });
         },
         /* 公共部分 END */
         /* 头部导航 START */
@@ -242,7 +239,7 @@
          *  获取切换的导航是第几位，再调用获取数据
          *  @param {Number} e 返回的序列号 
          */
-        handleSelect(e) {
+        handleSelect: function (e) {
           this.activeIndex = e;
           this.getList();
         },
@@ -253,21 +250,8 @@
          * @param {Array} brandLevel 传入的等级
          * @param {Array} process 该等级下的详细分支
          */
-        toDetail(brandLevel, process) {
-          var that = this;
-          console.log(brandLevel);
-          console.log(process);
-          var data = {
-            Data: {
-              rows: 10,
-              page: 1,
-              Brand_ID: this.brand_id[this.activeIndex],
-              BrandLevel: brandLevel.BrandLevel,
-              ProcessType: process.ProcessType,
-              sort: 1,
-            }
-          }
-          parent.addTab(this.menuNav[this.activeIndex] + '-申请店代-待' + brandLevel.BrandLevelName + "审核", '/APITester/applicationDetail.aspx?rows=10&page=1&sort=1&Brand_ID=' + this.brand_id[this.activeIndex] + "&BrandLevel=" + brandLevel.BrandLevel + "&ProcessType=" + process.ProcessType + "&BrandLevelName=" + process.ProcessBrandLevelName);
+        toDetail: function (brandLevel, process) {
+          parent.addTab(this.menuNav[this.activeIndex] + "-申请店代-待" + brandLevel.BrandLevelName + "审核", '/APITester/applicationDetail.aspx?rows=10&page=1&sort=1&Brand_ID=' + this.brand_id[this.activeIndex] + "&BrandLevel=" + brandLevel.BrandLevel + "&ProcessType=" + process.ProcessType + "&BrandLevelName=" + process.ProcessBrandLevelName);
         },
         /* 列表 END */
       },
@@ -283,7 +267,7 @@
         clearInterval(this.timer);
         this.timer = null;
       }
-    })
+    });
   </script>
 </body>
 

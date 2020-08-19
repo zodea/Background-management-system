@@ -429,8 +429,6 @@
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="/d/js/ele-common.js"></script>
   <script>
-    var requestCount = 0; // 请求计数
-    var loading = null; // 是否加载
     var api = "http://192.168.3.222:8024/sr/CustomerApplyProcess.ashx?Oper="; // 开发添加代理，发布需删除
     var NVMicroService = {
       GetApplyListByPC: "GetApplyListByPC", // 申请审核-XXX级别--待XX审核列表
@@ -454,16 +452,16 @@
         checkVisible: false, // 查询表单显隐
         typeList: [ // 上级及推荐人搜索的单选选项
           {
-            QueryType: '授权名',
+            QueryType: "授权名",
             value: 0,
           }, {
-            QueryType: '授权代码',
+            QueryType: "授权代码",
             value: 1,
           }, {
-            QueryType: '手机号',
+            QueryType: "手机号",
             value: 2,
           }, {
-            QueryType: '微信号',
+            QueryType: "微信号",
             value: 3,
           }
         ],
@@ -485,10 +483,10 @@
         applicantListsIndexTemp: "", // 确认绑定的申请人上级
         auditType: [ // 审核单选列表
           {
-            QueryType: '审核成功',
+            QueryType: "审核成功",
             value: true,
           }, {
-            QueryType: '审核失败',
+            QueryType: "审核失败",
             value: false,
           }],
         auditRemarks: "", // 审核留言
@@ -500,12 +498,12 @@
       methods: {
         /* 详情页 START */
         /* 对参数进行处理 */
-        getRequest() {
+        getRequest: function () {
           var url = window.location.search;
-          var theRequest = new Object();
+          var theRequest = {};
           if (url.indexOf("?") !== -1) {
             var str = url.substr(1);
-            var strs = new Array();
+            var strs = [];
             strs = str.split("&");
             for (var i = 0; i < strs.length; i++) {
               theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
@@ -515,7 +513,7 @@
           this.url = theRequest;
         },
         /* 获取详细数据 */
-        getDetail(data = []) {
+        getDetail: function (data) {
           var that = this;
           // 仅显示申请中的数据
           var datas = {
@@ -528,7 +526,7 @@
               "sort": 1,
               "Query": data,
             }
-          }
+          };
           // 对数据进行处理
           this.MT.request({
             url: api + NVMicroService.GetApplyListByPC,
@@ -538,7 +536,6 @@
                 var models = res.CustomerApplyModels;
                 that.RecordCount = res.RecordCount;
                 that.list = models;
-                var timeline = []
                 // 对时间线的数据进行赋值
                 models.forEach(function (res, index) {
                   that.list[index].timeline = [
@@ -548,13 +545,13 @@
                       size: "large",
                       timestamp: res.ApplyTime,
                       BrandLevelName: "提交订单"
-                    }]
+                    }];
                   for (var i = 0; i < res.ProcessCustomer.length; i++) {
                     if (!res.ProcessCustomer[i].HandleTime) {
                       that.list[index].timeline[i + 1] = {
                         timestamp: res.ProcessCustomer[i].HandleTime || "",
                         BrandLevelName: res.ProcessCustomer[i].BrandLevelName + "审核（" + res.ProcessCustomer[i].Name + "）"
-                      }
+                      };
                     } else {
                       that.list[index].timeline[i + 1] = {
                         type: "primary",
@@ -562,16 +559,15 @@
                         size: "large",
                         timestamp: res.ProcessCustomer[i].HandleTime || "",
                         BrandLevelName: res.ProcessCustomer[i].BrandLevelName + "审核（" + res.ProcessCustomer[i].Name + "）"
-                      }
+                      };
                     }
-
                   }
                   that.list[index].timeline.push(
                     {
                       timestamp: "",
                       BrandLevelName: "审核成功"
-                    })
-                })
+                    });
+                });
               }
             },
             onfail: function (err) {
@@ -580,20 +576,20 @@
               that.$message.error("暂未获取到数据");
               console.error(err);
             }
-          })
+          });
         },
         /* 搜索 START */
         /**
          * 弹出一个 dialog 进行数据的筛选，并根据 type 的类型请求不同的接口
          */
-        check(type) {
+        check: function (type) {
           this.checkType = type === "referrer" ? "推荐人" : "申请人上级";
           this.checkVisible = true;
         },
         /*
          * 对头部搜索栏进行数据合并，在作出相关搜索
          */
-        search() {
+        search: function () {
           var filters = [];
           if (this.filterForm.applyTime[0] !== "") {
             filters.push({
@@ -604,61 +600,61 @@
               "QueryField": "ApplyTime",
               "op": "lt",
               "QueryValue": this.filterForm.applyTime[1]
-            })
+            });
           }
           if (this.filterForm.applyName) {
             filters.push({
               "QueryField": "Name",
               "op": "eq",
               "QueryValue": this.filterForm.applyName
-            })
+            });
           }
           if (this.filterForm.applyPhone) {
             filters.push({
               "QueryField": "Phone",
               "op": "eq",
               "QueryValue": this.filterForm.applyPhone
-            })
+            });
           }
           if (this.filterForm.applyWeChat) {
             filters.push({
               "QueryField": "WeChat",
               "op": "eq",
               "QueryValue": this.filterForm.applyWeChat
-            })
+            });
           }
           if (this.filterForm.referrerTargetCustomer_ID) {
             filters.push({
               "QueryField": "Brand_RecommendId",
               "op": "eq",
               "QueryValue": this.filterForm.referrerTargetCustomer_ID
-            })
+            });
           }
           if (this.filterForm.applicantTargetCustomer_ID) {
             filters.push({
               "QueryField": "ParentId",
               "op": "eq",
               "QueryValue": this.filterForm.applicantTargetCustomer_ID
-            })
+            });
           }
 
           if (filters.length === 0) {
             this.$message.error("请输入搜索条件后再试");
-            return
+            return;
           }
           this.page = 1;
-          item = filters;
+          var item = filters;
           this.getDetail(item);
         },
-        reset() {
-          this.$refs["filterForms"].resetFields();
+        reset: function () {
+          this.$refs.filterForms.resetFields();
           this.page = 1;
-          this.getDetail();
+          this.getDetail([]);
         },
         /* 搜索 END */
         /* 表单 START */
         // 多选时进行的赋值操作
-        select(val) {
+        select: function (val) {
           this.checkOptions = val;
           if (val.length === 0) {
             this.batchDisable = true;
@@ -667,36 +663,36 @@
           }
         },
         // 对多选的内容进行审核操作
-        batchReview() {
+        batchReview: function () {
           // 通过获取到选中列的ID进行操作
           this.auditVisible = true;
           this.auditItem = null;
         },
-        auditThis(val) {
+        auditThis: function (val) {
           this.auditItem = val;
           this.auditVisible = true;
         },
         /* 分页 START */
-        handleSizeChange(value) {
+        handleSizeChange: function (value) {
           this.rows = value;
-          this.getDetail();
+          this.getDetail([]);
         },
-        handleCurrentChange(value) {
+        handleCurrentChange: function (value) {
           this.page = value;
-          this.getDetail();
+          this.getDetail([]);
         },
         /* 分页 END */
         /* 表单 END */
         /* 弹窗操作 START */
         // 暂时无查找人的接口
-        dialogSearch() {
+        dialogSearch: function () {
           var that = this;
           if (this.checkInput === "") {
             this.$message({
               type: "warning",
               message: "请填写需要绑定代理的" + this.typeList[this.typeIndex].QueryType
-            })
-            return
+            });
+            return;
           }
           // 暂时只能通过id进行查找
           this.MT.request({
@@ -716,60 +712,60 @@
                 }
               } else {
                 that.$message({
-                  type: 'error',
-                  message: data.Message || '代理列表请求失败'
+                  type: "error",
+                  message: data.Message || "代理列表请求失败"
                 });
               }
             },
             onfail: function (err) {
               console.error(err);
             }
-          })
+          });
         },
         //确认绑定代理
-        submitAgent(type) {
+        submitAgent: function (type) {
           // 先清除表单
-          this.$refs["filterForms"].resetFields();
+          this.$refs.filterForms.resetFields();
           if (type === "referrer") {
             // 将当前选中的赋值
             this.referrerListsIndex = this.referrerListsIndexTemp;
-            this.filterForm.referrerTargetCustomer_ID = this.referrerLists[this.referrerListsIndex].ID
+            this.filterForm.referrerTargetCustomer_ID = this.referrerLists[this.referrerListsIndex].ID;
           }
           if (type === "applicant") {
             // 将当前选中的赋值
             this.applicantListsIndex = this.applicantListsIndexTemp;
-            this.filterForm.applicantTargetCustomer_ID = this.applicantLists[this.applicantListsIndex].ID
+            this.filterForm.applicantTargetCustomer_ID = this.applicantLists[this.applicantListsIndex].ID;
           }
           this.checkVisible = false;
           this.search();
         },
         //解除绑定代理
-        disBindAgent(type) {
+        disBindAgent: function (type) {
           if (type === "referrer") {
-            this.filterForm.referrerTargetCustomer_ID = ''
-            this.referrerLists = null
-            this.referrerListsIndex = ''
-            this.referrerListsIndexTemp = ''
+            this.filterForm.referrerTargetCustomer_ID = "";
+            this.referrerLists = null;
+            this.referrerListsIndex = "";
+            this.referrerListsIndexTemp = "";
           }
           if (type === "applicant") {
-            this.filterForm.applicantTargetCustomer_ID = ''
-            this.applicantLists = null
-            this.applicantListsIndex = ''
-            this.applicantListsIndexTemp = ''
+            this.filterForm.applicantTargetCustomer_ID = "";
+            this.applicantLists = null;
+            this.applicantListsIndex = "";
+            this.applicantListsIndexTemp = "";
           }
-          this.getDetail()
+          this.getDetail([]);
         },
         // 总部审核的操作
-        handlePass() {
+        handlePass: function () {
           var that = this;
           var datas = {
             Ispass: this.auditIndex,
             FailureReason: this.auditRemarks,
-          }
+          };
           if (this.auditItem) {
             datas.CustomerApply_ID = [this.auditItem.ID];
           } else {
-            var arr = []
+            var arr = [];
             for (var i = 0; i < this.checkOptions.length; i++) {
               arr.push(this.checkOptions[i].ID);
             }
@@ -779,10 +775,10 @@
             url: api + NVMicroService.Handle,
             data: JSON.stringify(datas),
             onsuccess: function (res) {
-              for (let i = 0; i < res.length; i++) {
+              for (var i = 0; i < res.length; i++) {
                 var item = res[i];
                 if (!item.Success) {
-                  that.$message.error(item.Message)
+                  that.$message.error(item.Message);
                   return;
                 }
               }
@@ -792,16 +788,16 @@
             onfail: function (err) {
               console.error(222, err);
             }
-          })
+          });
         },
         /* 弹窗操作 END */
         /* 详情页 END */
       },
       mounted: function () {
         this.getRequest();
-        this.getDetail();
+        this.getDetail([]);
       }
-    })
+    });
   </script>
 </body>
 

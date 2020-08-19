@@ -102,6 +102,7 @@
       height: 30px;
       background: #409eff;
       margin-right: 10px;
+      cursor: pointer;
     }
 
     /* 申请的样式 */
@@ -118,6 +119,7 @@
       width: 100px;
       border-radius: 4px;
       border: 1px solid rgba(0, 0, 0, 0.15);
+      cursor: pointer;
     }
 
     .power {
@@ -234,20 +236,6 @@
             return item.BrandName === type
           })
         },
-        /**
-         *  数组去重 
-         */
-        /* unique(arr) {
-          for (var i = 0; i < arr.length; i++) {
-            for (var j = i + 1; j < arr.length; j++) {
-              if (arr[i] === arr[j]) {
-                arr.splice(j, 1);
-                j--;
-              }
-            }
-          }
-          return arr;
-        }, */
         /* 公共部分 END */
         /* 头部导航 START */
         /**
@@ -279,7 +267,7 @@
               sort: 1,
             }
           }
-          parent.addTab('-申请店代-', '/APITester/applicationDetail.aspx?rows=10&page=1&sort=1&Brand_ID=' + this.brand_id[this.activeIndex]+"&BrandLevel="+brandLevel.BrandLevel+"&ProcessType=" + process.ProcessType+"&BrandLevelName=" + process.ProcessBrandLevelName);
+          parent.addTab(this.menuNav[this.activeIndex] + '-申请店代-待' + brandLevel.BrandLevelName + "审核", '/APITester/applicationDetail.aspx?rows=10&page=1&sort=1&Brand_ID=' + this.brand_id[this.activeIndex] + "&BrandLevel=" + brandLevel.BrandLevel + "&ProcessType=" + process.ProcessType + "&BrandLevelName=" + process.ProcessBrandLevelName);
         },
         /* 列表 END */
       },

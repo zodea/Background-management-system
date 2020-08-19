@@ -79,6 +79,13 @@
       justify-content: space-between;
     }
 
+    .container {
+      width: 1200px;
+      margin: auto;
+      padding-bottom: 30px;
+      margin-top: 30px;
+    }
+
     /* 审核列表详情 START */
     .tooltip-link {
       margin-left: 30px;
@@ -102,32 +109,18 @@
 
     .imgs {
       margin-left: 170px;
+      align-items: flex-start;
+    }
+
+    .nav {
+      margin-bottom: 20px;
     }
 
     /* 修改时间线样式 START */
-    .half-line {
-      padding-bottom: 0;
-      padding-top: 20px;
-    }
-
     .el-timeline-item__content {
       color: #999999;
       font-size: 12px;
       font-weight: 500;
-    }
-
-    .half-line:first-child {
-      padding-top: 0;
-    }
-
-    .el-timeline-item__tail {
-      top: 0;
-      height: 120%;
-    }
-
-    .el-timeline .el-timeline-item:last-child .el-timeline-item__tail {
-      display: block;
-      top: -27px;
     }
 
     .light .el-timeline-item__content {
@@ -151,7 +144,7 @@
       height: 6px;
     }
 
-    .light .el-timeline-item__node--large {
+    .el-timeline-item__node--large {
       left: -4px;
       width: 18px;
       height: 18px;
@@ -160,11 +153,10 @@
     /* 修改时间线样式 END */
 
     .search {
-      align-self: center;
       width: 80px;
       height: 30px;
       margin-left: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       padding: 0;
       border-radius: 2px;
       font-size: 12px;
@@ -193,6 +185,27 @@
     .pagination {
       margin-top: 20px;
       width: 100%;
+    }
+
+    /* 绑定代理设置 */
+    .agentItem {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #EEE;
+      cursor: pointer;
+      line-height: 14px;
+    }
+
+    .agentItem:hover,
+    .agentItem.cur {
+      border-color: #409EFF;
+    }
+
+    .agentHead {
+      width: 42px;
+      height: 42px;
+      border-radius: 6px;
+      margin-right: 8px;
     }
 
     /* 审核列表详情 END */
@@ -224,17 +237,34 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-tooltip class="item" effect="dark" content="按推荐人查询" placement="bottom">
-          <el-link class="tooltip-link" type="primary" :underline="false" @click="check('referrer')">
-            <span
-              v-if="agentLists && agentLists[agentListsIndex]">当前查询推荐人：{{agentLists[agentListsIndex].CustomField1}}</span>
-            <span v-else>查询推荐人</span>
-          </el-link>
-          <span v-if="agentLists && agentLists[agentListsIndex]" class="pointer" @click="disBindAgent">解除</span>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="按申请人上级查询" placement="bottom">
-          <el-link class="tooltip-link" type="primary" :underline="false" @click="check('applicant')">查询申请人上级</el-link>
-        </el-tooltip>
+        <el-form-item>
+          <el-tooltip class="item flex" effect="dark" content="按推荐人查询" placement="bottom">
+            <div>
+              <el-link class="tooltip-link" type="primary" :underline="false" @click="check('referrer')">
+                <span v-if="referrerLists && referrerLists[referrerListsIndex]">
+                  当前查询推荐人：{{referrerLists[referrerListsIndex].CustomField1}}
+                </span>
+                <span v-else>查询推荐人</span>
+              </el-link>
+              <span v-if="referrerLists && referrerLists[referrerListsIndex]" class="pointer"
+                @click="disBindAgent('referrer')">解除</span>
+            </div>
+          </el-tooltip>
+        </el-form-item>
+        <el-form-item>
+          <el-tooltip class="item flex" effect="dark" content="按申请人上级查询" placement="bottom">
+            <div>
+              <el-link class="tooltip-link" type="primary" :underline="false" @click="check('applicant')">
+                <span v-if="applicantLists && applicantLists[applicantListsIndex]">
+                  当前查询申请人上级：{{applicantLists[applicantListsIndex].CustomField1}}
+                </span>
+                <span v-else>查询申请人上级</span>
+              </el-link>
+              <span v-if="applicantLists && applicantLists[applicantListsIndex]" class="pointer"
+                @click="disBindAgent('applicant')">解除</span>
+            </div>
+          </el-tooltip>
+        </el-form-item>
         <el-button type="primary" class="search" @click="search">搜索</el-button>
         <el-button class="search" @click="reset">重置</el-button>
       </el-form>
@@ -291,9 +321,8 @@
         <el-table-column label="审核进度" width="370">
           <template slot-scope="scope">
             <el-timeline class="info">
-              <el-timeline-item v-for="(pc, index) in scope.row.timeline" :key="index" class="half-line"
-                :class="{light: pc.timestamp}" :type="pc.type" :icon="pc.icon" :size="pc.size"
-                :timestamp="pc.timestamp">
+              <el-timeline-item v-for="(pc, index) in scope.row.timeline" :key="index" :class="{light: pc.timestamp}"
+                :type="pc.type" :icon="pc.icon" :size="pc.size" :timestamp="pc.timestamp">
                 {{pc.BrandLevelName}}
               </el-timeline-item>
             </el-timeline>
@@ -310,17 +339,49 @@
     </div>
     <el-dialog :title="'查询'+checkType" :visible.sync="checkVisible" width="500px">
       <el-radio-group v-model="typeIndex">
-        <el-radio v-for="(item, index) in typeList" :key="index" :value="index" :label="index">{{item.QueryType}}
+        <el-radio size="mini" v-for="(item, index) in typeList" :key="index" :value="index" :label="index">
+          {{item.QueryType}}
         </el-radio>
       </el-radio-group>
       <div class="flex" style="margin-top: 30px;">
-        <el-input :placeholder="'请输入' + checkType + typeList[typeIndex].QueryType" v-model="checkInput">
+        <el-input size="mini" :placeholder="'请输入' + checkType + typeList[typeIndex].QueryType" v-model="checkInput">
         </el-input>
-        <el-button type="primary" style="margin-left: 10px;" @click="dialogSearch">搜索</el-button>
+        <el-button size="mini" type="primary" style="margin-left: 10px;" @click="dialogSearch">搜索</el-button>
+      </div>
+      <div class="flex" v-if="checkType === '推荐人'">
+        <div @click="referrerListsIndexTemp = index"
+          :class="['flex-between', 'agentItem', referrerListsIndexTemp === index?'cur':'']"
+          v-for="(item, index) in referrerLists" :key="index">
+          <img :src="item.HeadUrl" v-if="item.HeadUrl" class="agentHead" alt="">
+          <div>
+            <p v-if="item.CustomField1">代理名：{{item.CustomField1}}</p>
+            <p v-if="item.CustomField2">电话：{{item.CustomField2}}</p>
+            <p v-if="item.CustomField3">微信：{{item.CustomField3}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex" v-if="checkType === '申请人上级'">
+        <div @click="applicantListsIndexTemp = index"
+          :class="['flex-between', 'agentItem', applicantListsIndexTemp === index?'cur':'']"
+          v-for="(item, index) in applicantLists" :key="index">
+          <img :src="item.HeadUrl" v-if="item.HeadUrl" class="agentHead" alt="">
+          <div>
+            <p v-if="item.CustomField1">代理名：{{item.CustomField1}}</p>
+            <p v-if="item.CustomField2">电话：{{item.CustomField2}}</p>
+            <p v-if="item.CustomField3">微信：{{item.CustomField3}}</p>
+          </div>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="checkVisible = false">取 消</el-button>
+        <el-button v-if="referrerLists && referrerListsIndexTemp !== '' && checkType === '推荐人'" size="mini"
+          type="primary" @click="submitAgent('referrer')">确 定</el-button>
+        <el-button v-if="applicantLists && applicantListsIndexTemp !== '' && checkType === '申请人上级'" size="mini"
+          type="primary" @click="submitAgent('applicant')">确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>
-
 
   <script src="/d/js/jquery-3.3.1.min.js"></script>
   <script src="/d/js/vue.min.js"></script>
@@ -343,18 +404,24 @@
           applyName: "",
           applyPhone: "",
           applyWeChat: "",
-          sort: ""
+          sort: "",
+          referrerTargetCustomer_ID: "",
+          applicantTargetCustomer_ID: "",
         },
         sortList: [
           {
-            value: "aaa",
+            value: "1",
             label: "申请时间（降）"
+          },
+          {
+            value: "2",
+            label: "申请时间（升）"
           },
         ],
         checkType: "", // 查询表单标题
         checkVisible: false, // 查询表单显隐
         activeIndex: 0,
-        menuNav: ["全部", "审核成功", "审核失败"],
+        menuNav: ["全部", "申请中", "申请成功", "申请失败"],
         typeList: [ // 上级及推荐人搜索的单选选项
           {
             QueryType: '授权名',
@@ -372,6 +439,12 @@
         ],
         typeIndex: 0, // 当前选中的选项序号
         checkInput: "", // 查询弹窗的输入框
+        referrerLists: null, // 搜索找出的推荐人
+        referrerListsIndex: "", // 当前选中推荐人
+        referrerListsIndexTemp: "", // 确认绑定的推荐人
+        applicantLists: null, // 搜索找出的申请人上级
+        applicantListsIndex: "", // 当前选中申请人上级
+        applicantListsIndexTemp: "", // 确认绑定的申请人上级
         /* 展示的列表 */
         list: null, // 列表
         /* 分页 */
@@ -383,22 +456,22 @@
         /* 详情页 START */
         /* 对参数进行处理 */
         /* 获取详细数据 */
-        getDetail(data = "") {
+        getDetail(data = []) {
           var that = this;
+          var datas = {
+            "Data": {
+              "rows": this.rows, // 直接获取默认的分页数据
+              "page": this.page,
+              "sort": this.filterForm.sort || 1,
+              "Query": data
+            }
+          }
           this.MT.request({
             url: api + NVMicroService.GetApplyLog,
-            data: data || JSON.stringify({
-              Data: {
-                "rows": 10,
-                "page": 1,
-                // "Brand_ID": 1,
-                // "BrandLevel": 4,
-                // "ProcessType": "PL3",
-                "sort": 2,
-              }
-            }),
+            data: JSON.stringify(datas),
             onsuccess: function (res) {
               if (res) {
+                console.log(res);
                 var models = res.CustomerApplyModels;
                 that.RecordCount = res.RecordCount;
                 that.list = models;
@@ -428,7 +501,15 @@
                         BrandLevelName: res.ProcessCustomer[i].BrandLevelName + "审核（" + res.ProcessCustomer[i].Name + "）"
                       }
                     }
-
+                    if (i === res.ProcessCustomer.length - 1 && res.Operate === "申请失败") {
+                      that.list[index].timeline[i + 1] = {
+                        type: "danger",
+                        icon: "el-icon-close",
+                        size: "large",
+                        timestamp: res.ProcessCustomer[i].HandleTime || "",
+                        BrandLevelName: res.ProcessCustomer[i].BrandLevelName + "审核（" + res.ProcessCustomer[i].Name + "）"
+                      }
+                    }
                   }
                   that.list[index].timeline.push(
                     {
@@ -459,7 +540,16 @@
          */
         search() {
           var filters = [];
-          if (this.filterForm.applyTime) {
+          if (this.activeIndex === 0) {
+            filters = []
+          } else {
+            filters.push({
+              "QueryField": "Operate",
+              "op": "eq",
+              "QueryValue": this.menuNav[this.activeIndex]
+            })
+          }
+          if (this.filterForm.applyTime[0] !== "") {
             filters.push({
               "QueryField": "ApplyTime",
               "op": "gt",
@@ -491,16 +581,32 @@
               "QueryValue": this.filterForm.applyWeChat
             })
           }
+          if (this.filterForm.referrerTargetCustomer_ID) {
+            filters.push({
+              "QueryField": "Brand_RecommendId",
+              "op": "eq",
+              "QueryValue": this.filterForm.referrerTargetCustomer_ID
+            })
+          }
+          if (this.filterForm.applicantTargetCustomer_ID) {
+            filters.push({
+              "QueryField": "ParentId",
+              "op": "eq",
+              "QueryValue": this.filterForm.applicantTargetCustomer_ID
+            })
+          }
+
           if (filters.length === 0) {
             this.$message.error("请输入搜索条件后再试");
             return
           }
-          var item = this.deepCopy(this.url);
-          item.Data.Query = filters;
-          this.getDetail(JSON.stringify(item));
+          this.page = 1;
+          item = filters;
+          this.getDetail(item);
         },
         reset() {
           this.$refs["filterForms"].resetFields();
+          this.page = 1;
           this.getDetail();
         },
         /* 搜索 END */
@@ -508,17 +614,16 @@
         // 头部选择框
         handleSelect(e) {
           this.activeIndex = e;
-          this.getList();
+          var type = this.menuNav[e];
+          this.search();
         },
         /* 分页 START */
         handleSizeChange(value) {
           this.rows = value;
-          this.url.Data.rows = value;
           this.getDetail();
         },
         handleCurrentChange(value) {
           this.page = value;
-          this.url.Data.page = value;
           this.getDetail();
         },
         /* 分页 END */
@@ -526,6 +631,7 @@
         /* 弹窗操作 START */
         // 暂时无查找人的接口
         dialogSearch() {
+          var that = this;
           if (this.checkInput === "") {
             this.$message({
               type: "warning",
@@ -533,6 +639,7 @@
             })
             return
           }
+          // 暂时只能通过id进行查找
           this.MT.request({
             url: NVMicroService.Customer,
             data: {
@@ -540,44 +647,65 @@
               QueryType: this.typeList[this.typeIndex].QueryType,
               QueryValue: this.checkInput,
             },
-            onsuccess: function (res) {
-              console.log(res);
+            onsuccess: function (data) {
+              console.log(data);
+              if (data.Success) {
+                if (that.checkType === "推荐人") {
+                  that.referrerLists = [data.Data];
+                }
+                if (that.checkType === "申请人上级") {
+                  that.applicantLists = [data.Data];
+                }
+              } else {
+                that.$message({
+                  type: 'error',
+                  message: data.Message || '代理列表请求失败'
+                });
+              }
             },
             onfail: function (err) {
               console.error(err);
             }
           })
-          console.log(this.checkInput);
+        },
+        //确认绑定代理
+        submitAgent(type) {
+          // 先清除表单
+          this.$refs["filterForms"].resetFields();
+          if (type === "referrer") {
+            // 将当前选中的赋值
+            this.referrerListsIndex = this.referrerListsIndexTemp;
+            this.filterForm.referrerTargetCustomer_ID = this.referrerLists[this.referrerListsIndex].ID
+          }
+          if (type === "applicant") {
+            // 将当前选中的赋值
+            this.applicantListsIndex = this.applicantListsIndexTemp;
+            this.filterForm.applicantTargetCustomer_ID = this.applicantLists[this.applicantListsIndex].ID
+          }
+          this.checkVisible = false;
+          this.search();
+        },
+        //解除绑定代理
+        disBindAgent(type) {
+          if (type === "referrer") {
+            this.filterForm.referrerTargetCustomer_ID = ''
+            this.referrerLists = null
+            this.referrerListsIndex = ''
+            this.referrerListsIndexTemp = ''
+          }
+          if (type === "applicant") {
+            this.filterForm.applicantTargetCustomer_ID = ''
+            this.applicantLists = null
+            this.applicantListsIndex = ''
+            this.applicantListsIndexTemp = ''
+          }
+          this.getDetail()
         },
         /* 弹窗操作 END */
         /* 详情页 END */
-        /* 深拷贝 */
-        deepCopy(target) {
-          let copyed_objs = [];//此数组解决了循环引用和相同引用的问题，它存放已经递归到的目标对象 
-          function _deepCopy(target) {
-            if ((typeof target !== 'object') || !target) { return target; }
-            for (let i = 0; i < copyed_objs.length; i++) {
-              if (copyed_objs[i].target === target) {
-                return copyed_objs[i].copyTarget;
-              }
-            }
-            let obj = {};
-            if (Array.isArray(target)) {
-              obj = [];//处理target是数组的情况 
-            }
-            copyed_objs.push({ target: target, copyTarget: obj })
-            Object.keys(target).forEach(key => {
-              if (obj[key]) { return; }
-              obj[key] = _deepCopy(target[key]);
-            });
-            return obj;
-          }
-          return _deepCopy(target);
-        }
       },
       mounted: function () {
         this.getDetail();
-
       }
     })
   </script>

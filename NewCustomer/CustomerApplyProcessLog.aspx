@@ -89,14 +89,13 @@
     /* 审核列表详情 START */
     .tooltip-link {
       margin-left: 30px;
-      margin-bottom: 20px;
       font-size: 12px;
       font-weight: 500;
     }
 
     .person-info {
-      margin-left: 67px;
       width: 280px;
+      padding: 0 20px;
       text-align: left;
     }
 
@@ -108,34 +107,18 @@
     }
 
     .imgs {
-      margin-left: 170px;
       align-items: flex-start;
     }
 
-    /* 修改时间线样式 START */
-    .half-line {
-      padding-bottom: 0;
-      padding-top: 20px;
+    .nav {
+      margin-bottom: 20px;
     }
 
+    /* 修改时间线样式 START */
     .el-timeline-item__content {
       color: #999999;
       font-size: 12px;
       font-weight: 500;
-    }
-
-    .half-line:first-child {
-      padding-top: 0;
-    }
-
-    .el-timeline-item__tail {
-      top: 0;
-      height: 120%;
-    }
-
-    .el-timeline .el-timeline-item:last-child .el-timeline-item__tail {
-      display: block;
-      top: -27px;
     }
 
     .light .el-timeline-item__content {
@@ -159,7 +142,7 @@
       height: 6px;
     }
 
-    .light .el-timeline-item__node--large {
+    .el-timeline-item__node--large {
       left: -4px;
       width: 18px;
       height: 18px;
@@ -171,7 +154,6 @@
       width: 80px;
       height: 30px;
       margin-left: 20px;
-      margin-bottom: 18px;
       padding: 0;
       border-radius: 2px;
       font-size: 12px;
@@ -183,7 +165,7 @@
     }
 
     .cell .info {
-      padding: 32px 76px;
+      padding: 0 20px;
       text-align: left;
     }
 
@@ -246,6 +228,12 @@
         <el-form-item prop="applyWeChat" label="申请人微信号">
           <el-input size="mini" v-model="filterForm.applyWeChat" placeholder="申请人微信号"></el-input>
         </el-form-item>
+        <el-form-item prop="sort" label="排序">
+          <el-select size="mini" v-model="filterForm.sort">
+            <el-option v-for="item in sortList" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-tooltip class="item flex" effect="dark" content="按推荐人查询" placement="bottom">
             <div>
@@ -277,25 +265,20 @@
         <el-button type="primary" class="search" @click="search">搜索</el-button>
         <el-button class="search" @click="reset">重置</el-button>
       </el-form>
-      <el-button type="primary" style="margin-bottom: 20px;" :disabled="batchDisable" @click="batchReview">批量审核
-      </el-button>
-      <!-- <el-button v-if="BrandLevelName === '总代理'" type="primary" style="margin-bottom: 20px;" @click="batchReview">批量审核
-      </el-button> -->
+      <el-menu class="nav" :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+        <el-menu-item v-for="(item, index) in menuNav" :key="index" :index="index">{{item}}</el-menu-item>
+      </el-menu>
       <el-table :header-cell-style="{background:'#F5F5F5',color:'#333333',textAlign: 'center'}"
-        cell-class-name="audit-table" :data="list" width="100%" border @selection-change="select">
-        <el-table-column type="selection" width="55">
-        </el-table-column>
-        <!-- <el-table-column v-if="BrandLevelName === '总代理'" type="selection" width="55">
-        </el-table-column> -->
+        cell-class-name="audit-table" :data="list" width="100%" border>
         <el-table-column prop="Operate" label="状态" width="80">
         </el-table-column>
         <el-table-column prop="ID" label="ID" width="80">
         </el-table-column>
         <el-table-column prop="IsOldCustomerText" label="新/老" width="80">
         </el-table-column>
-        <el-table-column label="申请人信息" width="780">
+        <el-table-column label="申请人信息" width="450">
           <template slot-scope="scope">
-            <div class="flex">
+            <div class="flex flex-center">
               <div class="person-info flex flex-column">
                 <span>授权品牌：{{scope.row.BrandName}}</span>
                 <span>申请级别：{{scope.row.BrandLevelName}}</span>
@@ -312,14 +295,10 @@
                   <el-image class="audit-img" :src="scope.row.HeadUrl" alt="" :preview-src-list="[scope.row.HeadUrl]" />
                 </div>
                 <div class="flex">
-                  <div>
-                    <el-image class="audit-img" :src="scope.row.CustomImageUrl1" alt=""
-                      :preview-src-list="[scope.row.CustomImageUrl1]" />
-                  </div>
-                  <div>
-                    <el-image class="audit-img" :src="scope.row.CustomImageUrl2" alt=""
-                      :preview-src-list="[scope.row.CustomImageUrl2]" />
-                  </div>
+                  <el-image class="audit-img" :src="scope.row.CustomImageUrl1" alt=""
+                    :preview-src-list="[scope.row.CustomImageUrl1]" @click="console.log(11111)" />
+                  <el-image class="audit-img" :src="scope.row.CustomImageUrl2" alt=""
+                    :preview-src-list="[scope.row.CustomImageUrl2]" />
                 </div>
                 <div>
                   <el-image class="audit-img" :src="scope.row.HeadUrl" alt="" :preview-src-list="[scope.row.HeadUrl]" />
@@ -336,21 +315,17 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="审核进度" width="370">
+        <el-table-column label="审核进度" width="380">
           <template slot-scope="scope">
-            <el-timeline class="info">
-              <el-timeline-item v-for="(pc, index) in scope.row.timeline" :key="index" class="half-line"
-                :class="{light: pc.timestamp}" :type="pc.type" :icon="pc.icon" :size="pc.size"
-                :timestamp="pc.timestamp">
-                {{pc.BrandLevelName}}
-              </el-timeline-item>
-            </el-timeline>
-          </template>
-        </el-table-column>
-        <!-- <el-table-column v-if="BrandLevelName === '总代理'" label="操作" width="200"> -->
-        <el-table-column label="操作" width="200">
-          <template slot-scope="scope">
-            <el-link type="primary" :underline="false" @click="auditThis(scope.row)">审核</el-link>
+            <div class="flex flex-center">
+              <el-timeline class="info">
+                <el-timeline-item v-for="(pc, index) in scope.row.timeline" :key="index"
+                  :class="{light: pc.type==='primary'}" :type="pc.type" :icon="pc.icon" :size="pc.size"
+                  :timestamp="pc.timestamp">
+                  {{pc.BrandLevelName}}
+                </el-timeline-item>
+              </el-timeline>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -375,7 +350,7 @@
       </div>
       <div class="flex" v-if="checkType === '推荐人'">
         <div @click="referrerListsIndexTemp = index"
-          :class="['flex-between', 'agentItem', referrerListsIndexTemp === index?'cur':'']"
+          :class="['flex-between', 'agentItem', referrerListsIndexTemp === index?'cur':""]"
           v-for="(item, index) in referrerLists" :key="index">
           <img :src="item.HeadUrl" v-if="item.HeadUrl" class="agentHead" alt="">
           <div>
@@ -387,7 +362,7 @@
       </div>
       <div class="flex" v-if="checkType === '申请人上级'">
         <div @click="applicantListsIndexTemp = index"
-          :class="['flex-between', 'agentItem', applicantListsIndexTemp === index?'cur':'']"
+          :class="['flex-between', 'agentItem', applicantListsIndexTemp === index?'cur':""]"
           v-for="(item, index) in applicantLists" :key="index">
           <img :src="item.HeadUrl" v-if="item.HeadUrl" class="agentHead" alt="">
           <div>
@@ -399,28 +374,12 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="checkVisible = false">取 消</el-button>
-        <el-button v-if="referrerLists && referrerListsIndexTemp !== '' && checkType === '推荐人'" size="mini"
+        <el-button v-if="referrerLists && referrerListsIndexTemp !== "" && checkType === '推荐人'" size="mini"
           type="primary" @click="submitAgent('referrer')">确 定</el-button>
-        <el-button v-if="applicantLists && applicantListsIndexTemp !== '' && checkType === '申请人上级'" size="mini"
+        <el-button v-if="applicantLists && applicantListsIndexTemp !== "" && checkType === '申请人上级'" size="mini"
           type="primary" @click="submitAgent('applicant')">确 定
         </el-button>
       </div>
-    </el-dialog>
-    <el-dialog title="审核" :visible.sync="auditVisible" width="500px">
-      <el-form label-width="80px">
-        <el-form-item label="审核类型" required>
-          <el-radio-group v-model="auditIndex">
-            <el-radio v-for="(item, index) in auditType" :key="index" :label="item.value">{{item.QueryType}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="备注">
-          <el-input type="textarea" :rows="6" v-model="auditRemarks"></el-input>
-        </el-form-item>
-        <div class="flex flex-end">
-          <el-button class="dialog-btn">取消</el-button>
-          <el-button type="primary" class="dialog-btn" @click="handlePass">提交</el-button>
-        </div>
-      </el-form>
     </el-dialog>
   </div>
 
@@ -429,27 +388,38 @@
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="/d/js/ele-common.js"></script>
   <script>
-    var api = "http://192.168.3.222:8024/sr/CustomerApplyProcess.ashx?Oper="; // 开发添加代理，发布需删除
+    var api = "http://192.168.3.222:8024/sr/"; // 开发添加代理，发布需删除
     var NVMicroService = {
-      GetApplyListByPC: "GetApplyListByPC", // 申请审核-XXX级别--待XX审核列表
-      Handle: "Handle", // 申请审核-总部审核操作
+      GetApplyLog: "CustomerApplyProcess.ashx?Oper=GetApplyLog", // 申请审核-所有申请记录
       Customer: "http://192.168.3.130:8086/sr/Customer.ashx", // 查找代理
     }; // 接口地址
     var vm = new Vue({
       el: "#app",
       data: {
         /* 头部导航  */
-        url: null,
         filterForm: { // 搜索框表单
           applyTime: "",
           applyName: "",
           applyPhone: "",
           applyWeChat: "",
+          sort: "",
           referrerTargetCustomer_ID: "",
           applicantTargetCustomer_ID: "",
         },
+        sortList: [
+          {
+            value: "1",
+            label: "申请时间（降）"
+          },
+          {
+            value: "2",
+            label: "申请时间（升）"
+          },
+        ],
         checkType: "", // 查询表单标题
         checkVisible: false, // 查询表单显隐
+        activeIndex: 0,
+        menuNav: ["全部", "申请中", "申请通过", "申请失败"],
         typeList: [ // 上级及推荐人搜索的单选选项
           {
             QueryType: "授权名",
@@ -467,29 +437,14 @@
         ],
         typeIndex: 0, // 当前选中的选项序号
         checkInput: "", // 查询弹窗的输入框
-        /* 展示的列表 */
-        list: null, // 列表
-        BrandLevelName: "", // 点击的人员级别
-        batchDisable: true,
-        checkOptions: null, // 选中的数据
-        auditItem: null, // 选中的审核数据
-        auditVisible: false, // 审核弹窗显隐
-        auditIndex: true, // 审核选中的状态
         referrerLists: null, // 搜索找出的推荐人
         referrerListsIndex: "", // 当前选中推荐人
         referrerListsIndexTemp: "", // 确认绑定的推荐人
         applicantLists: null, // 搜索找出的申请人上级
         applicantListsIndex: "", // 当前选中申请人上级
         applicantListsIndexTemp: "", // 确认绑定的申请人上级
-        auditType: [ // 审核单选列表
-          {
-            QueryType: "审核成功",
-            value: true,
-          }, {
-            QueryType: "审核失败",
-            value: false,
-          }],
-        auditRemarks: "", // 审核留言
+        /* 展示的列表 */
+        list: null, // 列表
         /* 分页 */
         page: 1, // 当前是第几页
         rows: 10, // 一页的个数
@@ -498,38 +453,19 @@
       methods: {
         /* 详情页 START */
         /* 对参数进行处理 */
-        getRequest: function () {
-          var url = window.location.search;
-          var theRequest = {};
-          if (url.indexOf("?") !== -1) {
-            var str = url.substr(1);
-            var strs = [];
-            strs = str.split("&");
-            for (var i = 0; i < strs.length; i++) {
-              theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
-            }
-          }
-          // this.BrandLevelName = theRequest.BrandLevelName;
-          this.url = theRequest;
-        },
         /* 获取详细数据 */
         getDetail: function (data) {
           var that = this;
-          // 仅显示申请中的数据
           var datas = {
             "Data": {
               "rows": this.rows, // 直接获取默认的分页数据
               "page": this.page,
-              "Brand_ID": this.url.Brand_ID,
-              "BrandLevel": this.url.BrandLevel,
-              "ProcessType": this.url.ProcessType,
-              "sort": 1,
-              "Query": data,
+              "sort": this.filterForm.sort || 1,
+              "Query": data
             }
           };
-          // 对数据进行处理
           this.MT.request({
-            url: api + NVMicroService.GetApplyListByPC,
+            url: api + NVMicroService.GetApplyLog,
             data: JSON.stringify(datas),
             onsuccess: function (res) {
               if (res) {
@@ -561,12 +497,31 @@
                         BrandLevelName: res.ProcessCustomer[i].BrandLevelName + "审核（" + res.ProcessCustomer[i].Name + "）"
                       };
                     }
+                    if (i === res.ProcessCustomer.length - 1 && res.Operate === "申请失败") {
+                      that.list[index].timeline[i + 1] = {
+                        type: "danger",
+                        icon: "el-icon-close",
+                        size: "large",
+                        timestamp: res.ProcessCustomer[i].HandleTime || "",
+                        BrandLevelName: res.ProcessCustomer[i].BrandLevelName + "审核（" + res.ProcessCustomer[i].Name + "）"
+                      };
+                    }
                   }
-                  that.list[index].timeline.push(
-                    {
+                  if (res.Operate === "申请通过") {
+                    that.list[index].timeline.push({
+                      type: "primary",
+                      icon: "el-icon-check",
+                      size: "large",
                       timestamp: "",
                       BrandLevelName: "审核成功"
-                    });
+                    })
+                  } else {
+                    that.list[index].timeline.push(
+                      {
+                        timestamp: "",
+                        BrandLevelName: "审核成功"
+                      });
+                  }
                 });
               }
             },
@@ -591,6 +546,15 @@
          */
         search: function () {
           var filters = [];
+          if (this.activeIndex === 0) {
+            filters = [];
+          } else {
+            filters.push({
+              "QueryField": "Operate",
+              "op": "eq",
+              "QueryValue": this.menuNav[this.activeIndex]
+            });
+          }
           if (this.filterForm.applyTime[0] !== "") {
             filters.push({
               "QueryField": "ApplyTime",
@@ -653,24 +617,10 @@
         },
         /* 搜索 END */
         /* 表单 START */
-        // 多选时进行的赋值操作
-        select: function (val) {
-          this.checkOptions = val;
-          if (val.length === 0) {
-            this.batchDisable = true;
-          } else {
-            this.batchDisable = false;
-          }
-        },
-        // 对多选的内容进行审核操作
-        batchReview: function () {
-          // 通过获取到选中列的ID进行操作
-          this.auditVisible = true;
-          this.auditItem = null;
-        },
-        auditThis: function (val) {
-          this.auditItem = val;
-          this.auditVisible = true;
+        // 头部选择框
+        handleSelect: function (e) {
+          this.activeIndex = e;
+          this.search();
         },
         /* 分页 START */
         handleSizeChange: function (value) {
@@ -703,6 +653,7 @@
               QueryValue: this.checkInput,
             },
             onsuccess: function (data) {
+              console.log(data);
               if (data.Success) {
                 if (that.checkType === "推荐人") {
                   that.referrerLists = [data.Data];
@@ -755,46 +706,10 @@
           }
           this.getDetail([]);
         },
-        // 总部审核的操作
-        handlePass: function () {
-          var that = this;
-          var datas = {
-            Ispass: this.auditIndex,
-            FailureReason: this.auditRemarks,
-          };
-          if (this.auditItem) {
-            datas.CustomerApply_ID = [this.auditItem.ID];
-          } else {
-            var arr = [];
-            for (var i = 0; i < this.checkOptions.length; i++) {
-              arr.push(this.checkOptions[i].ID);
-            }
-            datas.CustomerApply_ID = arr;
-          }
-          this.MT.request({
-            url: api + NVMicroService.Handle,
-            data: JSON.stringify(datas),
-            onsuccess: function (res) {
-              for (var i = 0; i < res.length; i++) {
-                var item = res[i];
-                if (!item.Success) {
-                  that.$message.error(item.Message);
-                  return;
-                }
-              }
-              this.auditVisible = false;
-              console.log(111, res);
-            },
-            onfail: function (err) {
-              console.error(222, err);
-            }
-          });
-        },
         /* 弹窗操作 END */
         /* 详情页 END */
       },
       mounted: function () {
-        this.getRequest();
         this.getDetail([]);
       }
     });

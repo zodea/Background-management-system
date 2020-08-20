@@ -354,9 +354,6 @@
             // **************测试王老吉后台****************
             div += `<div class='list-item'><a href='#' onclick='addTab("王老吉-活动列表", "/wanglaoji/W_ProductActivity.aspx")'>王老吉-活动列表</a></div>`
             div += `<div class='list-item'><a href='#' onclick='addTab("王老吉-拼团订单", "/wanglaoji/W_GroupOrderList.aspx")'>王老吉-拼团订单</a></div>`
-            div += `<div class='list-item'><a href='#' onclick='addTab("申请审核情况", "/APITester/applicationReview.aspx")'>申请审核情况</a></div>`
-            div += `<div class='list-item'><a href='#' onclick='addTab("所有列表", "/APITester/getApplyLog.aspx")'>所有列表</a></div>`
-            div += `</div></div></div>`;
             // 当遍历完成后，添加按钮并渲染
             $(".open-btn").removeClass("hidden-side");
 
@@ -621,7 +618,7 @@
             frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink0);
           }
           var jsLink = document.createElement("script");
-          jsLink.src = "/d/js/iframeJs_new.js?v=1";
+          jsLink.src = "/d/js/iframeJs_new.js?v=3";
           jsLink.type = "text/javascript";
           frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink);
           setTimeout(function () {

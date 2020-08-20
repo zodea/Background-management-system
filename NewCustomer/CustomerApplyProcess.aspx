@@ -151,7 +151,7 @@
         <el-menu-item v-for="(item, index) in menuNav" :key="index" :index="index">{{item}}</el-menu-item>
       </el-menu>
       <div class="fresh flex align-center">
-        <img class="refresh" src="./image/refresh.png" alt="" @click="getList">
+        <img class="refresh" src="/icons/refresh.png" alt="" @click="getList">
         更新于{{requestTime}}(15分钟更新一次)
       </div>
       <div class="details" v-for="brandLevel in brandLevels" :key="brandLevel.BrandLevel">
@@ -163,7 +163,7 @@
               <p class="number">{{process.Qty}}</p>
             </div>
             <div v-if="ps < brandLevel.Processs.length - 1" class="icon">
-              <img src="./image/right.png" alt="">
+              <img src="/icons/right.png" alt="">
             </div>
           </div>
         </div>
@@ -251,7 +251,7 @@
          * @param {Array} process 该等级下的详细分支
          */
         toDetail: function (brandLevel, process) {
-          parent.addTab(this.menuNav[this.activeIndex] + "-申请店代-待" + brandLevel.BrandLevelName + "审核", '/APITester/applicationDetail.aspx?rows=10&page=1&sort=1&Brand_ID=' + this.brand_id[this.activeIndex] + "&BrandLevel=" + brandLevel.BrandLevel + "&ProcessType=" + process.ProcessType + "&BrandLevelName=" + process.ProcessBrandLevelName);
+          parent.addTab(this.menuNav[this.activeIndex] + "-申请店代-待" + brandLevel.BrandLevelName + "审核", 'NewCustomer/CustomerApplyProcessList.aspx?rows=10&page=1&sort=1&Brand_ID=' + this.brand_id[this.activeIndex] + "&BrandLevel=" + brandLevel.BrandLevel + "&ProcessType=" + process.ProcessType + "&BrandLevelName=" + process.ProcessBrandLevelName);
         },
         /* 列表 END */
       },

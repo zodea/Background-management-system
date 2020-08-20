@@ -16,7 +16,8 @@ body {
 }
 
 /* 防止span受body flex的影响 */
-body > span, body > span > span {
+body > span,
+body > span > span {
   display: contents;
 }
 #Form1 > div {
@@ -91,10 +92,16 @@ body > span, body > span > span {
   font-size: 16px;
   font-weight: bold;
 }
+/* 避免按钮样式透明的问题 */
 .ui-widget-content .ui-state-default {
-  border: 1px solid transparent;
+  border: 1px solid #dddddd;
   background: #f2f2f2;
   color: #333333;
+}
+/* 对按钮样式进行调整 */
+.ui-state-default .ui-priority-primary {
+  border: 1px solid #333333;
+  background: #e7fbff;
 }
 .ui-widget-content {
   /* border: none; */
@@ -106,7 +113,12 @@ body > span, body > span > span {
 #GridView1 th,
 #GridView1 td {
   padding: 4px 0;
-  border: 1px solid #f2f2f2;
+  border: 1px solid #bbbbbb;
+}
+/* table头部边框 */
+.ui-th-column,
+.ui-jqgrid .ui-jqgrid-htable th.ui-th-column {
+  border: 1px solid #dddddd;
 }
 .ui-jqgrid .ui-jqgrid-htable th {
   padding: 4px 2px;
@@ -209,6 +221,8 @@ span.text {
   filter: Alpha(Opacity=50);
 }
 
-.ui-jqgrid .ui-jqgrid-btable, .ui-jqgrid .ui-jqgrid-htable, table {
+.ui-jqgrid .ui-jqgrid-btable,
+.ui-jqgrid .ui-jqgrid-htable,
+table {
   border-collapse: collapse;
 }

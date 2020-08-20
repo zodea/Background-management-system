@@ -610,7 +610,7 @@
         // 动态传递样式
         $(`#page_${id}`).load(function () {
           var cssLink = document.createElement("link");
-          cssLink.href = "/css/iframe_new.css?v=3"; 
+          cssLink.href = "/css/iframe_new.css?v=4"; 
           cssLink.rel = "stylesheet";
           cssLink.type = "text/css";
           frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(cssLink);

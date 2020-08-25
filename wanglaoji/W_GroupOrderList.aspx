@@ -637,8 +637,7 @@
     // window.StateID = -1;
     window.baseUrl = '/sr/W_OrderList.ashx?StateID=';
     window.model_type = 1;
-    window.getAgentUrl = '/sr/Customer.ashx'
-
+    window.getAgentUrl = '/sr/Customer.ashx';
     window.stateType = [
       {
         label: '全部',
@@ -666,8 +665,7 @@
         color: 'hover-finish',
         value: 66,
       },
-    ]
-
+    ];
     now = new Date();
     var vm = new Vue({
       el: '.container',
@@ -784,19 +782,11 @@
         agentLists: null,
         agentListsIndex: '',
         agentListsIndexTemp: '',
-
         dialogSendVisible: false,
         sendForm: {
           EMSCompany: '',
           EMSCode: '',
         },
-
-        dialogSendVisible: false,
-        sendForm: {
-          EMSCompany: '',
-          EMSCode: '',
-        },
-
         dialogDetailVisible: false,
         // labelWidth: '100px',
         form: {
@@ -806,19 +796,15 @@
           WuserName: '',
           WtelNumber: ''
         },
-
         stateType: window.stateType,
         stateTypeIndex: 0,
-
         page: 1,
         rows: 10,
         PageCount: 0,
         RecordCount: 0,
         IsLastPage: false,
         filters: '',
-
         StateID: -1,
-
         //数据实体
         // list: null,
         list: [
@@ -878,7 +864,7 @@
         listIndex: 0,
       },
       methods: {
-        exports() {
+        exports: function () {
           this.MT.request({
             url: window.baseUrl + this.StateID,
             data: {
@@ -889,9 +875,9 @@
               Sort: this.form.Sort,
             },
             onsuccess: function (data) {
-              console.log(data)
+              console.log(data);
               if (data.Success) {
-                window.open(data.url)
+                window.open(data.url);
               } else {
                 vm.toast((data.Message || '导出错误'), "warning");
               }
@@ -899,10 +885,10 @@
             onfail: function (data) {
               vm.toast((data.Message || '导出失败详情失败'), "error");
             }
-          })
+          });
         },
         //查询代理
-        getAgentList() {
+        getAgentList: function () {
           if (this.QueryValue === '') {
             this.$message({
               type: 'warning',
@@ -917,10 +903,10 @@
               QueryType: this.QueryList[this.QueryListIndex].QueryType,
               QueryValue: this.QueryValue,
             },
-            onsuccess: (data) => {
-              console.log("getAgentList", data)
+            onsuccess: function (data) {
+              console.log("getAgentList", data);
               if (data.Success) {
-                this.agentLists = [data.Data]
+                this.agentLists = [data.Data];
               } else {
                 this.$message({
                   type: 'error',
@@ -928,13 +914,13 @@
                 });
               }
             },
-            onfail(err) {
-              console.log("爱迪生", err)
+            onfail: function (err) {
+              console.log("爱迪生", err);
             }
-          })
+          });
         },
         //重置表单
-        resetForm() {
+        resetForm: function () {
           this.form = {
             WorkDate: '',
             Code: '',
@@ -945,24 +931,23 @@
             openid: '',
             IsTransfer: '',
             Sort: 'asc',
-          }
+          };
         },
-
-        onSendDialogClose() {
+        onSendDialogClose: function () {
           this.sendForm = {
             EMSCompany: '',
             EMSCode: '',
-          }
+          };
         },
         //发货
-        send(index) {
+        send: function (index) {
           this.listIndex = index;
           this.dialogSendVisible = true;
           if (this.list[this.listIndex].PostageType != 1) {
             if (this.list[this.listIndex].EMSCompany) this.sendForm.EMSCompany = this.list[this.listIndex].EMSCompany;
           }
         },
-        submitSend() {
+        submitSend: function () {
           if (this.list[this.listIndex].PostageType != 1) {
             if (!this.sendForm.EMSCompany) {
               vm.toast('请选择快递公司', "error");
@@ -993,7 +978,7 @@
                   vm.list[vm.listIndex].EMSCode = vm.sendForm.EMSCode;
                   vm.list[vm.listIndex].EMSCompany = vm.sendForm.EMSCompany;
                 } else {
-                  vm.list.splice(vm.listIndex, 1)
+                  vm.list.splice(vm.listIndex, 1);
                 }
                 vm.dialogSendVisible = false;
                 vm.stateType[3].num -= 1;
@@ -1005,14 +990,13 @@
             onfail: function (data) {
               vm.toast(data.Message, "error");
             }
-          })
+          });
         },
         //自提
-        passSelf(index) {
+        passSelf: function (index) {
           this.listIndex = index;
-          this.$confirm('该订单是否需要客户自提吗？').then(value => {
+          this.$confirm('该订单是否需要客户自提吗？').then(function (value) {
             if (value == 'confirm') {
-
               this.MT.request({
                 url: window.baseUrl + this.StateID,
                 data: {
@@ -1030,7 +1014,7 @@
                       vm.list[vm.listIndex].State = vm.state.WAIT_PAY;
                       vm.list[vm.listIndex].StateText = '代付款';
                       vm.list[vm.listIndex].PostageTypeText = '自提';
-                    } else vm.list.splice(vm.listIndex, 1)
+                    } else vm.list.splice(vm.listIndex, 1);
                     vm.dialogPassVisible = false;
                     vm.stateType[1].num -= 1;
                     vm.stateType[2].num += 1;
@@ -1041,31 +1025,30 @@
                 onfail: function (data) {
                   vm.toast(data.Message, "error");
                 }
-              })
+              });
             }
-          })
+          });
         },
-
         //邮费审核
-        passExpress(index) {
+        passExpress: function (index) {
           this.dialogPassVisible = true;
           this.listIndex = index;
         },
         //确定审核运费
-        pass() {
+        pass: function () {
           if (!this.passForm.EMSCompany) {
             vm.toast('请选择快递公司', "error");
-            return
+            return;
           }
           if (this.passForm.Postage == 0 && this.passForm.PostageType == 3) {
-            this.$confirm('运费是否设置为0').then(value => {
+            this.$confirm('运费是否设置为0').then(function (value) {
               if (value == 'confirm') {
                 this.passFn();
               }
-            })
+            });
           } else this.passFn();
         },
-        passFn() {
+        passFn: function () {
           this.MT.request({
             url: window.baseUrl + this.StateID,
             data: {
@@ -1086,7 +1069,9 @@
                   vm.list[vm.listIndex].StateText = '代付款';
                   vm.list[vm.listIndex].Postage = vm.passForm.Postage;
                   vm.list[vm.listIndex].PostageTypeText = vm.passForm.PostageType == 2 ? '免邮费' : '邮费';
-                } else vm.list.splice(vm.listIndex, 1)
+                } else {
+                  vm.list.splice(vm.listIndex, 1);
+                }
                 vm.dialogPassVisible = false;
                 vm.stateType[1].num -= 1;
                 vm.stateType[2].num += 1;
@@ -1097,12 +1082,12 @@
             onfail: function (data) {
               vm.toast(data.Message, "error");
             }
-          })
+          });
         },
         //审核失败
-        passFail(index) {
+        passFail: function (index) {
           this.listIndex = index;
-          this.$prompt('该订单是否需要审核失败？').then(({ value }) => {
+          this.$prompt('该订单是否需要审核失败？').then(function (value) {
             this.MT.request({
               url: window.baseUrl + this.StateID,
               data: {
@@ -1119,7 +1104,7 @@
                   if (vm.StateID == -1) {
                     vm.list[vm.listIndex].State = vm.state.AUDITED_FAIL;
                     vm.list[vm.listIndex].StateText = '审核失败';
-                  } else vm.list.splice(vm.listIndex, 1)
+                  } else vm.list.splice(vm.listIndex, 1);
                   vm.stateType[1].num -= 1;
                   vm.toast("操作成功", "success");
                 } else vm.toast(data.Message, "error");
@@ -1127,11 +1112,10 @@
               onfail: function (data) {
                 vm.toast(data.Message, "error");
               }
-            })
-          })
+            });
+          });
         },
-
-        getList() {
+        getList: function () {
           this.MT.request({
             url: window.baseUrl + this.StateID,
             data: {
@@ -1145,7 +1129,7 @@
               Sort: this.form.Sort,
             },
             onsuccess: function (data) {
-              console.log("请求列表", data)
+              console.log("请求列表", data);
               if (data.Success) {
                 if (data.List && data.List.length != 0) {
                   vm.list = data.List;
@@ -1159,10 +1143,10 @@
                 }
               } else vm.toast(data.Message, "error");
             }
-          })
+          });
         },
         //订单状态数量
-        getStateNum() {
+        getStateNum: function () {
           this.MT.request({
             url: window.baseUrl + this.StateID,
             data: {
@@ -1171,35 +1155,36 @@
               TransferType: 0,
             },
             onsuccess: function (data) {
-              console.log("请求列表", data)
+              console.log("请求列表", data);
               if (data.Success) {
-                for (let i of vm.stateType) {
-                  for (let j = 0; j < data.OrderCounts.length; j++) {
+                for (var i of vm.stateType) {
+                  for (var j = 0; j < data.OrderCounts.length; j++) {
                     if (i.value == data.OrderCounts[j].State) {
                       i.num = data.OrderCounts[j].Qty;
                       break;
-                    } else if (j == data.OrderCounts.length - 1) i.num = false
+                    } else if (j == data.OrderCounts.length - 1) {
+                      i.num = false;
+                    }
                   }
                 }
               }
               else vm.toast(data.Message, "error");
             }
-          })
+          });
         },
-        getDiscountMoney(x, y) {
-          return (Number(x) - Number(y)).toFixed(2)
+        getDiscountMoney: function (x, y) {
+          return (Number(x) - Number(y)).toFixed(2);
         },
         //分页器钩子
-        handleSizeChange(value) {
+        handleSizeChange: function (value) {
           this.rows = value;
           this.getList();
         },
-        handleCurrentChange(value) {
+        handleCurrentChange: function (value) {
           this.page = value;
           this.getList();
         },
-
-        changeState(state, index) {
+        changeState: function (state, index) {
           this.page = 1;
           this.resetForm();           //重置便当
           if (this.filters != '') {
@@ -1210,21 +1195,20 @@
           if (this.stateTypeIndex != index) {
             if (state == -100) {
               this.StateID = -1;
-              this.filters = JSON.stringify({ "groupOp": "AND", "rules": [{ "field": "IsClose", "op": "eq", "data": true }] })
+              this.filters = JSON.stringify({ "groupOp": "AND", "rules": [{ "field": "IsClose", "op": "eq", "data": true }] });
             } else {
-              this.StateID = state
+              this.StateID = state;
               // this.filters = JSON.stringify({"groupOp":"AND","rules":[{"field":"State","op":"eq","data":state}]})
             }
             this.getList();
             this.stateTypeIndex = index;
           }
         },
-
         //搜索
-        onsearch() {
-          let data = this.form;
-          let rules = [];
-          for (let i in data) {
+        onsearch: function () {
+          var data = this.form;
+          var rules = [];
+          for (var i in data) {
             if (i != 'Sort') {
               if (data[i]) {
                 if (i == 'WorkDate') {
@@ -1232,30 +1216,30 @@
                     field: i,
                     op: 'ge',
                     data: data[i][0]
-                  })
+                  });
                   rules.push({
                     field: i,
                     op: 'le',
                     data: data[i][1]
-                  })
+                  });
                 } else if (i == 'IsTransfer') {
                   rules.push({
                     field: i,
                     op: data[i] == 1 ? 'eq' : 'gt',
                     data: 0
-                  })
+                  });
                 } else if (i == 'W_ProductActivityType') {
                   rules.push({
                     field: i,
                     op: 'eq',
                     data: data[i] == 3 ? '' : data[i]
-                  })
+                  });
                 } else {
                   rules.push({
                     field: i,
                     op: this.isUseEq(i) ? 'eq' : 'cn',
                     data: data[i]
-                  })
+                  });
                 }
               }
             }
@@ -1263,26 +1247,25 @@
           if (rules.length > 0) {
             this.clearStateNum();
             if (this.stateType[this.stateTypeIndex].value != -1)
-              rules.push({ "field": "State", "op": "cn", "data": this.stateType[this.stateTypeIndex].value })
-            this.filters = JSON.stringify({ "groupOp": "AND", "rules": rules })
-          } else this.filters = '';
+              rules.push({ "field": "State", "op": "cn", "data": this.stateType[this.stateTypeIndex].value });
+            this.filters = JSON.stringify({ "groupOp": "AND", "rules": rules });
+          } else { this.filters = ''; }
           this.getList();
         },
         //是否需要使用eq的过滤字段
-        isUseEq(key) {
-          let arr = ['Source', 'TargetCustomer_ID']
-          return arr.indexOf(key) !== -1
+        isUseEq: function (key) {
+          var arr = ['Source', 'TargetCustomer_ID'];
+          return arr.indexOf(key) !== -1;
         },
       },
-      created() {
+      created: function () {
         //请求列表
         this.getList();
         //取每个状态的数量
         this.getStateNum();
       },
-      mounted() {
+      mounted: function () {
         var that = this;
-
         // this.$nextTick(()=>{
         //     console.log(this.$refs)
         //     console.log(this.$refs.listTitle)
@@ -1294,10 +1277,8 @@
         //         }else listTitle.className = 'list-title';
         //     }
         // })
-
-
       },
-    })
+    });
   </script>
 </body>
 

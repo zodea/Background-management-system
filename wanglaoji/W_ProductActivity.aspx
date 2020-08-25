@@ -763,8 +763,8 @@
   <script src="/d/js/ele-common.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-    let requestCount = 0; // 请求计数
-    let loading = null; // 是否加载
+    var requestCount = 0; // 请求计数
+    var loading = null; // 是否加载
     axios.interceptors.request.use(
       function (response) {
         loading = vm.$loading({
@@ -772,14 +772,14 @@
           text: "Loading",
           spinner: "el-icon-loading",
           background: 'rgba(0, 0, 0, 0.7)'
-        })
+        });
         requestCount++;
         return response;
       },
       function (err) {
         return Promise.reject(err);
       }
-    )
+    );
     axios.interceptors.response.use(
       function (response) {
         if (requestCount === 1) {
@@ -795,9 +795,9 @@
         requestCount--;
         return Promise.reject(err);
       }
-    )
-    let api = ""; // 开发添加代理，发布需删除
-    const NVMicroService = {
+    );
+    var api = ""; // 开发添加代理，发布需删除
+    var NVMicroService = {
       List: api + '/sr/W_ProductActivity.ashx?Oper=List', // 获取列表
       UpdateState: api + '/sr/W_ProductActivity.ashx?Oper=UpdateState', // 修改活动状态
       Delete: api + '/sr/W_ProductActivity.ashx?Oper=Delete', // 删除活动
@@ -805,17 +805,17 @@
       Model: api + '/sr/W_ProductActivity.ashx?Oper=Model', // 获取实体
       GetByCode: api + '/sr/Product.ashx?Oper=GetByCode', // 拉产品信息
     }; // 接口地址
-    const STATE_TYPE = {
+    var STATE_TYPE = {
       START: true, // 启用
       END: false // 停用
-    }
-    let vm = new Vue({
+    };
+    var vm = new Vue({
       el: "#app",
       data: {
         Page: "List", // 页面显示 List / Model
         pageType: 3, // 当前活动类型
         /****************** List START ******************/
-        STATE_TYPE, // 当前显示的类型
+        STATE_TYPE: STATE_TYPE, // 当前显示的类型
         page: 1, // 分页页数
         rows: 10, // 一页条数
         RecordCount: 0, // 总条数
@@ -980,18 +980,18 @@
       methods: {
         /****************** List START ******************/
         // 切换每页条数
-        handleSizeChange(val) {
+        handleSizeChange: function (val) {
           this.page = 1;
           this.rows = val;
-          this.GetList()
+          this.GetList();
         },
         // 切换页
-        handleCurrentChange(val) {
+        handleCurrentChange: function (val) {
           this.page = val;
-          this.GetList()
+          this.GetList();
         },
         // 创建活动
-        addActivity() {
+        addActivity: function () {
           // 重置ID
           this.ID = 0;
           // 活动设置
@@ -1000,19 +1000,19 @@
             Name: "", // 活动名称
             SaleCartTime: null, // 开卖时间段
             Tips: "" // 活动描述
-          }
+          };
           // 活动产品设置
           this.activityProductSet = {
             fullMoney: null,
             returnMoney: null
-          }
+          };
           // 购买限制
-          this.$refs["limitForm"].resetFields();
+          this.$refs.limitForm.resetFields();
           this.Products = [];
           this.Page = "Model";
         },
         // 查询活动列表
-        GetList() {
+        GetList: function () {
           // 调接口
           axios({
             method: 'post',
@@ -1025,19 +1025,19 @@
               filters: ''
             },
             responseType: 'json'
-          }).then(response => {
+          }).then(function (response) {
             // 请求成功
-            let res = response.data;
+            var res = response.data;
             console.log("GetList: ", res);
             if (res.Success) {
               if (res.Data.List && res.Data.List.length) {
-                this.listData = res.Data.List
+                this.listData = res.Data.List;
               } else {
-                this.listData = []
+                this.listData = [];
               }
-              res.Data && res.Data.RecordCount ? this.RecordCount = res.Data.RecordCount : ''
+              this.RecordCount = res.Data && res.Data.RecordCount || "";
             }
-          }).catch(error => {
+          }).catch(function (error) {
             // 请求失败，
             console.log("GetList error: ", error);
             this.$message.error('网络请求出错');
@@ -1047,12 +1047,12 @@
          * 修改状态
          * @param {Array} row 当前点击行的参数 
          */
-        UpdateState(row) {
-          this.$confirm(`是否要${row.State ? '停用' : '启用'}该活动?`, '提示', {
+        UpdateState: function (row) {
+          this.$confirm("是否要" + row.State ? '停用' : '启用' + "该活动?", '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
-          }).then(() => {
+          }).then(function() {
             axios({
               method: 'post',
               url: NVMicroService.UpdateState,
@@ -1064,30 +1064,30 @@
                 }
               },
               responseType: 'json'
-            }).then(response => {
+            }).then(function(response) {
               // 请求成功
-              let res = response.data;
+              var res = response.data;
               console.log("UpdateState: ", res);
               if (!res.Success) {
                 this.$message.error(res.Message);
               } else {
                 this.$message.success('操作成功');
-                this.GetList()
+                this.GetList();
               }
-            }).catch(error => {
+            }).catch(function(error) {
               // 请求失败，
               console.log("UpdateState error: ", error);
               this.$message.error('网络请求出错');
             });
-          })
+          });
         },
         // 删除活动
-        Delete(row) {
+        Delete: function (row) {
           this.$confirm('确定要删除该活动?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
-          }).then(() => {
+          }).then(function() {
             axios({
               method: 'post',
               url: NVMicroService.Delete,
@@ -1098,25 +1098,25 @@
                 }
               },
               responseType: 'json'
-            }).then(response => {
+            }).then(function(response) {
               // 请求成功
-              let res = response.data;
+              var res = response.data;
               console.log(res);
               if (!res.Success) {
                 this.$message.error(res.Message);
               } else {
                 this.$message.success('操作成功');
-                this.GetList()
+                this.GetList();
               }
-            }).catch(error => {
+            }).catch(function(error) {
               // 请求失败，
               console.log(error);
               this.$message.error('网络请求出错');
             });
-          })
+          });
         },
         // 点击修改库存
-        updataStock(row) {
+        updataStock: function (row) {
           axios({
             method: 'post',
             url: NVMicroService.ActivityStockGet,
@@ -1126,9 +1126,9 @@
               type: row.Type,
             },
             responseType: 'json'
-          }).then(response => {
+          }).then(function(response) {
             // 请求成功
-            let res = response.data;
+            var res = response.data;
             console.log(res);
             if (res.Success) {
               this.stockdata = {
@@ -1138,19 +1138,19 @@
                 ID: row.ID,
                 type: row.Type,
                 Reason: ''
-              }
-              this.stockVisible = true
+              };
+              this.stockVisible = true;
             } else {
               this.$message.error(res.Message);
             }
-          }).catch(error => {
+          }).catch(function(error) {
             // 请求失败，
             console.log(error);
             this.$message.error('网络请求出错');
           });
         },
         // 点击编辑
-        edit(row, type = "edit") {
+        edit: function (row, type = "edit") {
           //  type 如果是edit就是编辑 如果是copy就是复制
           axios({
             method: 'post',
@@ -1161,16 +1161,16 @@
               type: row.Type
             },
             responseType: 'json'
-          }).then(response => {
+          }).then(function(response) {
             // 请求成功
-            let res = response.data;
+            var res = response.data;
             if (res.Success) {
               this.Page = 'Model';
-              let data = res.Data
+              var data = res.Data;
               console.log(data);
               if (type === 'edit') {
                 // 保存ID
-                this.ID = data.ID
+                this.ID = data.ID;
               } else {
                 this.ID = 0;
               }
@@ -1180,16 +1180,16 @@
                 Name: data.Name, // 活动名称
                 SaleCartTime: [data.SaleCartStartTime, data.SaleCartEndTime], // 开卖时间段
                 Tips: data.Tips // 活动描述
-              }
+              };
               // 活动产品设置
               this.activityProductSet = {
                 fullMoney: null,
                 returnMoney: null
-              }
+              };
               // 活动产品
-              this.Products = data.Products
+              this.Products = data.Products;
             }
-          }).catch(error => {
+          }).catch(function(error) {
             // 请求失败，
             console.log(error);
             this.$message.error('网络请求出错');
@@ -1198,42 +1198,41 @@
         /****************** List END ******************/
         /****************** Model START ******************/
         // 删除活动产品
-        deleteProduct(index) {
-          this.Products.splice(index, 1)
+        deleteProduct: function (index) {
+          this.Products.splice(index, 1);
         },
         // 添加活动产品
-        addProduct(v) {
-          console.log(v)
-          this.ProductState = v
+        addProduct: function (v) {
+          console.log(v);
+          this.ProductState = v;
           this.productVisible = true;
         },
-        searchProduct() {
+        searchProduct: function () {
           var CodeData = this.textarea.split(/[(\r\n)\r\n]+/);
-          if (!CodeData.length) return
+          if (!CodeData.length) return;
           // 去除空格项目
-          var data = []
-          CodeData.map(v => {
+          var data = [];
+          CodeData.map(function(v) {
             if (v) {
-              data.push(v)
+              data.push(v);
             }
-          })
+          });
           var cfArr = [];
-          this.Products.map(item => {
-            data.map((v, i) => {
+          this.Products.map(function(item) {
+            data.map(function(v, i) {
               if (item.ProductCode === v) {
-                cfArr.push(v)
+                cfArr.push(v);
               }
-            })
-          })
+            });
+          });
           if (cfArr.length) {
             this.$message.error(cfArr.join(',') + ' 已存在，请勿重复添加');
-            return
+            return;
           }
-          this.GetByCode(data)
+          this.GetByCode(data);
         },
         // 拉取产品并添加
-        GetByCode(Code) {
-          var self = this;
+        GetByCode: function (Code) {
           axios({
             method: 'post',
             url: NVMicroService.GetByCode,
@@ -1242,26 +1241,26 @@
               Code: Code
             },
             responseType: 'json'
-          }).then(response => {
+          }).then(function(response) {
             // 请求成功
-            let res = response.data;
+            var res = response.data;
             console.log(res);
             if (res.Success) {
               var data = res.List;
               // 添加到组合的产品
-              this.Products = this.Products.concat(data)
-              this.productVisible = false
-              this.textarea = ''
+              this.Products = this.Products.concat(data);
+              this.productVisible = false;
+              this.textarea = '';
             } else {
               this.$message.error(res.Message);
             }
-          }).catch(error => {
+          }).catch(function(error) {
             // 请求失败，
             console.log(error);
           });
         },
         // 校验新增方案参数是否为空
-        checkAddItem(itemName) {
+        checkAddItem: function (itemName) {
           var item = {};
           var itemLabel = {};
           if (itemName === "activitySet") {
@@ -1291,16 +1290,16 @@
           return true;
         },
         // 活动产品判断
-        ProductsFn() {
+        ProductsFn: function () {
           if (!this.Products || !this.Products.length) {
             this.$message({
               message: "活动产品不能为空",
               type: "warning",
               showClose: true,
             });
-            return false
+            return false;
           }
-          let Bool = true
+          var Bool = true;
           for (var i = 0; i < this.Products.length; i++) {
             if (this.Products[i].Err) {
               this.$message({
@@ -1308,35 +1307,34 @@
                 type: "warning",
                 showClose: true,
               });
-              Bool = false
-              return
+              Bool = false;
+              return;
             } else if (!this.Products[i].OriginalPrice) {
               this.$message({
                 message: `产品${this.Products[i].ProductName}：单买价不能为空`,
                 type: "warning",
                 showClose: true,
               });
-              Bool = false
-              return
+              Bool = false;
+              return;
             } else if (!this.Products[i].ActivityPrice) {
               this.$message({
                 message: `产品${this.Products[i].ProductName}：拼团价不能为空`,
                 type: "warning",
                 showClose: true,
               });
-              Bool = false
-              return
+              Bool = false;
+              return;
             }
           }
-          return Bool
+          return Bool;
         },
         // 保存活动, 此处做相关商品的处理
-        keepActivity() {
-          let CustomerPrices = [], CustomerPriceBrand_ID = null;
+        keepActivity: function () {
           if (!this.checkAddItem('activitySet')) return;
           if (!this.checkAddItem('activityProductSet')) return;
-          if (!this.ProductsFn()) return
-          for (let item in groupLimit) {
+          if (!this.ProductsFn()) return;
+          for (var item in groupLimit) {
             if (groupLimit[item].length === 0) {
               this.$message({
                 message: groupLimit[item] + "不能为空",
@@ -1348,12 +1346,11 @@
           }
           // 在此做数据的判断，是否填写完毕
           // 数据都正确则进行赋值
-          const data = {};
           // 接口请求
         },
         /****************** Model END ******************/
       }
-    })
+    });
   </script>
 </body>
 

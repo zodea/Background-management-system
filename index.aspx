@@ -352,8 +352,8 @@
             // **************测试王老吉后台****************
             // **************测试王老吉后台****************
             // **************测试王老吉后台****************
-            div += `<div class='list-item'><a href='#' onclick='addTab("王老吉-活动列表", "/wanglaoji/W_ProductActivity.aspx")'>王老吉-活动列表</a></div>`
-            div += `<div class='list-item'><a href='#' onclick='addTab("王老吉-拼团订单", "/wanglaoji/W_GroupOrderList.aspx")'>王老吉-拼团订单</a></div>`
+            div += `<div class='list-item'><a href='#' onclick='addTab("王老吉-活动列表", "/groupOrders/ActivityList.aspx")'>王老吉-活动列表</a></div>`
+            div += `<div class='list-item'><a href='#' onclick='addTab("创建拼团活动", "/groupOrders/AddActivity.aspx")'>王老吉-创建拼团活动</a></div>`
             // 当遍历完成后，添加按钮并渲染
             $(".open-btn").removeClass("hidden-side");
 
@@ -607,7 +607,7 @@
         // 动态传递样式
         $(`#page_${id}`).load(function () {
           var cssLink = document.createElement("link");
-          cssLink.href = "/css/iframe_new.css?v=4"; 
+          cssLink.href = "/css/iframe_new.css?v=7"; 
           cssLink.rel = "stylesheet";
           cssLink.type = "text/css";
           frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(cssLink);

@@ -61,8 +61,8 @@ body > span > span {
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-  border: 1px solid #000000;
-  background: rgba(24, 144, 255, 0.05);
+  background: #f5f5f5;
+  color: #333333;
 }
 /* 按钮内容 */
 .fg-toolbar .fg-button {
@@ -128,13 +128,17 @@ body > span > span {
 .ui-jqgrid-view .ui-jqgrid-bdiv div table {
   min-height: 1px;
 }
-
-.ui-jqgrid tr.ui-row-ltr td {
-  border-right: 1px solid #f2f2f2;
-}
+/* 修改table下的tr下的td */
 .ui-jqgrid tr.jqgrow td {
-  border: 1px solid #f2f2f2;
-  padding: 4px 0;
+  border: 1px solid #eeeeee;
+  padding: 10px 0;
+}
+.ui-jqgrid tr.jqgrow td[style*="text-align:left;"] {
+  padding-left: 10px;
+}
+/* 根据奇偶行进行背景色的配置 */
+tr:nth-child(odd) {
+  background-color: #f5f5f5;
 }
 .ui-jqgrid td.jqgrid-rownum {
   background: #fff;

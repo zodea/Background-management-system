@@ -94,8 +94,8 @@ body > span > span {
 }
 /* 避免按钮样式透明的问题 */
 .ui-widget-content .ui-state-default {
-  border: 1px solid #dddddd;
-  background: #f2f2f2;
+  border: 1px solid #e5e5e5;
+  background: #f5f5f5;
   color: #333333;
 }
 /* 对按钮样式进行调整 */
@@ -112,13 +112,8 @@ body > span > span {
 /* table 内边距 */
 #GridView1 th,
 #GridView1 td {
-  padding: 4px 0;
-  border: 1px solid #bbbbbb;
-}
-/* table头部边框 */
-.ui-th-column,
-.ui-jqgrid .ui-jqgrid-htable th.ui-th-column {
-  border: 1px solid #dddddd;
+  padding: 10px 15px;
+  border: 1px solid #eeeeee;
 }
 .ui-jqgrid .ui-jqgrid-htable th {
   padding: 4px 2px;
@@ -135,10 +130,6 @@ body > span > span {
 }
 .ui-jqgrid tr.jqgrow td[style*="text-align:left;"] {
   padding-left: 10px;
-}
-/* 根据奇偶行进行背景色的配置 */
-tr:nth-child(odd) {
-  background-color: #f5f5f5;
 }
 .ui-jqgrid td.jqgrid-rownum {
   background: #fff;

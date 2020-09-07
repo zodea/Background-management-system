@@ -258,7 +258,7 @@
             window.location.href = 'Login.aspx'
           }
           var data2 = "<div>" + data + "</div>";
-          let dom = $(data2);
+          var dom = $(data2);
           var domArr = [];
           var len = dom.find("h3 > a").length;
           // 获取一级菜单标题
@@ -362,7 +362,7 @@
               $(".menu").removeClass("menu-closed");
               $(".menu-wrapper").removeClass("menu-closed");
               $(".open-btn").addClass("opened");
-            } 
+            }
             else {
               $(".menu .menu-wrapper").remove();
               $(".menu").prepend(div);
@@ -370,7 +370,7 @@
               $(".menu-wrapper").removeClass("menu-closed");
               $(".open-btn").addClass("opened");
             }
-            
+
             // 对相应节点进行隐藏
             hideSecond([]);
             // 图片的扩展事件
@@ -535,13 +535,13 @@
 
     // 阻止冒泡行为
     function stopP(e) {
-      //如果提供了事件对象，则这是一个非IE浏览器 
-      if ( e && e.stopPropagation ) 
-        //因此它支持W3C的stopPropagation()方法 
-        e.stopPropagation(); 
+      //如果提供了事件对象，则这是一个非IE浏览器
+      if ( e && e.stopPropagation )
+        //因此它支持W3C的stopPropagation()方法
+        e.stopPropagation();
       else {
-        //否则，我们需要使用IE的方式来取消事件冒泡 
-        window.event.cancelBubble = true; 
+        //否则，我们需要使用IE的方式来取消事件冒泡
+        window.event.cancelBubble = true;
       }
     }
 
@@ -602,12 +602,12 @@
         if($(".benma_ui_tab")[0].scrollWidth > $(".benma_ui_tab").width()) {
           $(".benma_ui_tab").css("overflow-x", "scroll");
         }
-        
+
         document.getElementById("page").style.visibility = "hidden";
         // 动态传递样式
         $(`#page_${id}`).load(function () {
           var cssLink = document.createElement("link");
-          cssLink.href = "/css/iframe_new.css?v=7"; 
+          cssLink.href = "/css/iframe_new.css?v=11";
           cssLink.rel = "stylesheet";
           cssLink.type = "text/css";
           frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(cssLink);
@@ -623,7 +623,7 @@
           frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink);
           setTimeout(function () {
             document.getElementById("page").style.visibility = "visible";
-          }, 500); 
+          }, 500);
         })
       } else {
         ishave++;
@@ -645,7 +645,7 @@
       var length = tabs.length;
       for(var i = 1; i < length; i++) {
         if (
-          i < length && 
+          i < length &&
           tabs[i]["fn"] === func
         ) {
           return;
@@ -653,7 +653,7 @@
       }
       tabs.push({nav: nav, menu: menu, fn: func});
     }
-    
+
     function writeTime() {
       var d = new Date();
       $("#myTime").html(d.getHours() + '时' + d.getMinutes() + '分' + d.getSeconds() + '秒');
@@ -802,7 +802,7 @@
       坐席号：
       <select id="selInChn" runat="server">
         <option></option>
-      </select>  
+      </select>
     </asp:Panel>
     <div runat="server" id="divNoReadQty" style="display: inline-block; cursor: pointer;"
       onclick="addTab('代理消息-未', 'CustomerMessage/CustomerMessageList.aspx?IsReadReceive=0')">
@@ -813,4 +813,4 @@
     </div>
   </div>
 </body>
-</html> 
+</html>

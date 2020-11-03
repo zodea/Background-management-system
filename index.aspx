@@ -17,213 +17,44 @@
     <script type="text/javascript" src="<%=LTP.Common.ConfigHelper.GetConfigString("jsurl")%>/d/js/jquery.fancybox-1.3.4.pack.js"></script>
     <script type="text/javascript" src="<%=LTP.Common.ConfigHelper.GetConfigString("jsurl")%>/d/js/jquery.qrcode-0.11.0.min.js"></script>
   <style type="text/css">
-    @IMPORT url("imgs/tab.css");
-    @IMPORT url("css/new_new.css?v=1");
+  @IMPORT url("imgs/tab.css");
+  @IMPORT url("css/new_new.css?v=1");
+  html, body { height: 100%; }
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 0; padding: 0; min-width: 1100px; }
+  table { font-size: 12px; }
+  a { text-decoration: none }
+  .ui-layout-pane-west { /* OVERRIDE 'default styles' */ padding: 0 !important; overflow: hidden !important; border-width: 0px !important; }
+  .ui-layout-north { /* OVERRIDE 'default styles' */ padding: 0 !important; overflow: hidden !important; border-width: 0px !important; }
+  .ui-layout-south { padding: 0 !important; overflow: hidden !important; border-width: 0px !important; }
+  .ui-layout-center { margin-left: 0; }
+  .ui-tabs .ui-tabs-panel { padding: 0px 10px 0px 10px !important; overflow: hidden !important; }
+  .ui-accordion .ui-accordion-content { padding-left: 10px; padding-top: 0px; padding-right: 0px; }
+  .ui-layout-resizer { background: #DFEFFC url(css/redmond/images/ui-bg_glass_85_dfeffc_1x400.png) repeat-x scroll 50% 50% !important; }
+  .ui-layout-resizer-closed { background: #DFEFFC url(css/redmond/images/ui-bg_glass_85_dfeffc_1x400.png) repeat-x scroll 50% 50% !important; border: 1px solid #6C0; border-width: 1px 0; }
+  .ui-layout-toggler { background: #FF9900 repeat-x scroll 50% 50% !important; }
+  h2 { background-color: #cccccc; padding: 0px; font-size: 18px; font-family: "黑体"; }
+  ul { margin: 1px; }
+  #tab_menu { padding: 0px; width: 99%; overflow: hidden; }
+  #page { width: calc(100% - 15px); height: calc(100% - 50px); margin-left: 15px; }
 
-    html,
-    body {
-      height: 100%;
-    }
+  A:link { FONT-SIZE: 12px; COLOR: #666666; TEXT-DECORATION: none }
+  A:active { FONT-SIZE: 12px; COLOR: #666666; TEXT-DECORATION: none }
+  A:visited { FONT-SIZE: 12px; COLOR: #666666; TEXT-DECORATION: none }
+  A:hover { FONT-SIZE: 12px; COLOR: #f29422; TEXT-DECORATION: none }
+  A.blue:link { FONT-SIZE: 12px; COLOR: #ffffff; TEXT-DECORATION: none }
+  A.blue:active { FONT-SIZE: 12px; COLOR: #73a2d6; TEXT-DECORATION: none }
+  A.blue:visited { FONT-SIZE: 12px; COLOR: #ffffff; TEXT-DECORATION: none }
+  A.blue:hover { FONT-SIZE: 12px; COLOR: #73a2d6; TEXT-DECORATION: underline }
+  .demoHeaders { margin-top: 2em; }
 
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      margin: 0;
-      padding: 0;
-      min-width: 1100px;
-    }
-
-    table {
-      font-size: 12px;
-    }
-
-    a {
-      text-decoration: none
-    }
-
-    .ui-layout-pane-west {
-      /* OVERRIDE 'default styles' */
-      padding: 0 !important;
-      overflow: hidden !important;
-      border-width: 0px !important;
-    }
-
-    .ui-layout-north {
-      /* OVERRIDE 'default styles' */
-      padding: 0 !important;
-      overflow: hidden !important;
-      border-width: 0px !important;
-
-    }
-
-    .ui-layout-south {
-      padding: 0 !important;
-      overflow: hidden !important;
-      border-width: 0px !important;
-    }
-
-    .ui-layout-center {
-      margin-left: 0;
-    }
-
-    .ui-tabs .ui-tabs-panel {
-      padding: 0px 10px 0px 10px !important;
-      overflow: hidden !important;
-    }
-
-    .ui-accordion .ui-accordion-content {
-      padding-left: 10px;
-      padding-top: 0px;
-      padding-right: 0px;
-    }
-
-
-    .ui-layout-resizer {
-      background: #DFEFFC url(css/redmond/images/ui-bg_glass_85_dfeffc_1x400.png) repeat-x scroll 50% 50% !important;
-
-    }
-
-    .ui-layout-resizer-closed {
-      background: #DFEFFC url(css/redmond/images/ui-bg_glass_85_dfeffc_1x400.png) repeat-x scroll 50% 50% !important;
-      border: 1px solid #6C0;
-      border-width: 1px 0;
-    }
-
-    .ui-layout-toggler {
-      background: #FF9900 repeat-x scroll 50% 50% !important;
-    }
-
-
-    h2 {
-      background-color: #cccccc;
-      padding: 0px;
-      font-size: 18px;
-      font-family: "黑体";
-    }
-
-    ul {
-      margin: 1px;
-    }
-
-
-    #tab_menu {
-      padding: 0px;
-      width: 99%;
-      overflow: hidden;
-    }
-
-    #page {
-      width: calc(100% - 15px);
-      height: calc(100% - 50px);
-      margin-left: 15px;
-    }
-
-    A:link {
-      FONT-SIZE: 12px;
-      COLOR: #666666;
-      TEXT-DECORATION: none
-    }
-
-    A:active {
-      FONT-SIZE: 12px;
-      COLOR: #666666;
-      TEXT-DECORATION: none
-    }
-
-    A:visited {
-      FONT-SIZE: 12px;
-      COLOR: #666666;
-      TEXT-DECORATION: none
-    }
-
-    A:hover {
-      FONT-SIZE: 12px;
-      COLOR: #f29422;
-      TEXT-DECORATION: none
-    }
-
-    A.blue:link {
-      FONT-SIZE: 12px;
-      COLOR: #ffffff;
-      TEXT-DECORATION: none
-    }
-
-    A.blue:active {
-      FONT-SIZE: 12px;
-      COLOR: #73a2d6;
-      TEXT-DECORATION: none
-    }
-
-    A.blue:visited {
-      FONT-SIZE: 12px;
-      COLOR: #ffffff;
-      TEXT-DECORATION: none
-    }
-
-    A.blue:hover {
-      FONT-SIZE: 12px;
-      COLOR: #73a2d6;
-      TEXT-DECORATION: underline
-    }
-
-    .demoHeaders {
-      margin-top: 2em;
-    }
-
-    #dialog_link {
-      padding: .4em 1em .4em 20px;
-      text-decoration: none;
-      position: relative;
-    }
-
-    #dialog_link span.ui-icon {
-      margin: 0 5px 0 0;
-      position: absolute;
-      left: .2em;
-      top: 50%;
-      margin-top: -8px;
-    }
-
-    ul#icons {
-      margin: 0;
-      padding: 0;
-    }
-
-    ul#icons li {
-      margin: 2px;
-      position: relative;
-      padding: 4px 0;
-      cursor: pointer;
-      float: left;
-      list-style: none;
-    }
-
-    ul#icons span.ui-icon {
-      float: left;
-      margin: 0 4px;
-    }
-
-    .oper {
-      padding: .4em 1em .4em 20px;
-      text-decoration: none;
-      position: relative;
-    }
-
-    .oper span.ui-icon {
-      margin: 0 5px 0 0;
-      position: absolute;
-      left: .2em;
-      top: 50%;
-      margin-top: -8px;
-    }
-
-    .delBtn {
-      float: right;
-      color: #89b7d9;
-      border: none;
-      background: none;
-      display: inline-block;
-    }
+  #dialog_link { padding: .4em 1em .4em 20px; text-decoration: none; position: relative; }
+  #dialog_link span.ui-icon { margin: 0 5px 0 0; position: absolute; left: .2em; top: 50%; margin-top: -8px; }
+  ul#icons { margin: 0; padding: 0; }
+  ul#icons li { margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left; list-style: none; }
+  ul#icons span.ui-icon { float: left; margin: 0 4px; }
+  .oper { padding: .4em 1em .4em 20px; text-decoration: none; position: relative; }
+  .oper span.ui-icon { margin: 0 5px 0 0; position: absolute; left: .2em; top: 50%; margin-top: -8px; }
+  .delBtn { float: right; color: #89b7d9; border: none; background: none; display: inline-block; }
   </style>
 	<script type="text/javascript">
     function PopIt() {
@@ -341,19 +172,6 @@
                 div += `<div class="list-item" data-title="${items[i].text}">${items[i].el}</div>`;
               }
             }
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            // **************测试王老吉后台****************
-            div += `<div class='list-item'><a href='#' onclick='addTab("王老吉-活动列表", "/groupOrders/ActivityList.aspx")'>王老吉-活动列表</a></div>`
-            div += `<div class='list-item'><a href='#' onclick='addTab("创建拼团活动", "/groupOrders/AddActivity.aspx")'>王老吉-创建拼团活动</a></div>`
             // 当遍历完成后，添加按钮并渲染
             $(".open-btn").removeClass("hidden-side");
 
@@ -610,20 +428,24 @@
           cssLink.href = "/css/iframe_new.css?v=11";
           cssLink.rel = "stylesheet";
           cssLink.type = "text/css";
-          frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(cssLink);
-          if (!frames["page_" + id].contentWindow.jQuery) {
-            var jsLink0 = document.createElement("script");
-            jsLink0.src = "/d/js/jquery/1.4.2/jquery.min.js";
-            jsLink0.type = "text/javascript";
-            frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink0);
+          try {
+            frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(cssLink);
+            if (!frames["page_" + id].contentWindow.jQuery) {
+              var jsLink0 = document.createElement("script");
+              jsLink0.src = "/d/js/jquery/1.4.2/jquery.min.js";
+              jsLink0.type = "text/javascript";
+              frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink0);
+            }
+            var jsLink = document.createElement("script");
+            jsLink.src = "/d/js/iframeJs_new.js?v=3";
+            jsLink.type = "text/javascript";
+            frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink);
+          } catch (error) {
+            console.error(error);
           }
-          var jsLink = document.createElement("script");
-          jsLink.src = "/d/js/iframeJs_new.js?v=3";
-          jsLink.type = "text/javascript";
-          frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink);
           setTimeout(function () {
             document.getElementById("page").style.visibility = "visible";
-          }, 500);
+          }, 100);
         })
       } else {
         ishave++;

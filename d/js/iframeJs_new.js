@@ -24,10 +24,8 @@ $(document).ready(function () {
     }
   }
 
-  btnShow();
-
-  if ($.fn.live) {
-    $("#showMore").live("click", function () {
+  function btnHidden() {
+    if (btns.length > 3) {
       $(".fg-buttonset > *").removeClass("btnsHidden");
       $("#showMore").addClass("btnsHidden");
       if ($("#showLess").index() === -1) {
@@ -35,6 +33,14 @@ $(document).ready(function () {
       } else {
         $("#showLess").removeClass("btnsHidden");
       }
+    }
+  }
+
+  btnHidden();
+
+  if ($.fn.live) {
+    $("#showMore").live("click", function () {
+      btnHidden();
     });
     $("#showLess").live("click", function () {
       $("#showMore").removeClass("btnsHidden");
@@ -43,13 +49,7 @@ $(document).ready(function () {
     });
   } else {
     $("#showMore").on("click", function () {
-      $(".fg-buttonset > *").removeClass("btnsHidden");
-      $("#showMore").addClass("btnsHidden");
-      if ($("#showLess").index() === -1) {
-        $(".fg-buttonset").append('<button id="showLess">点击收起</button>');
-      } else {
-        $("#showLess").removeClass("btnsHidden");
-      }
+      btnHidden();
     });
     $("#showLess").on("click", function () {
       $("#showMore").removeClass("btnsHidden");

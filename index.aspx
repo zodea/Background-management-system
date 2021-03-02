@@ -437,7 +437,7 @@
               frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink0);
             }
             var jsLink = document.createElement("script");
-            jsLink.src = "/d/js/iframeJs_new.js?v=3";
+            jsLink.src = "/d/js/iframeJs_new.js?v=10000";
             jsLink.type = "text/javascript";
             frames["page_" + id].contentWindow.document.getElementsByTagName("head")[0].append(jsLink);
           } catch (error) {

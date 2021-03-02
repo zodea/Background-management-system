@@ -1045,7 +1045,7 @@
         },
         /**
          * 修改状态
-         * @param {Array} row 当前点击行的参数 
+         * @param {Array} row 当前点击行的参数
          */
         UpdateState: function (row) {
           this.$confirm("是否要" + row.State ? '停用' : '启用' + "该活动?", '提示', {
